@@ -112,8 +112,9 @@ const cleanseString = function(string) {
   return string.replace(/</g, "&lt;").replace(/>/g, "&gt;");
 };
 
-app.get("/entries", (request, response) => {
-  client.getEntries
+app.get("/entries", async (request, response) => {
+  const entries = await client.getEntries()
+  return entries
 })
 
 // listen for requests :)
