@@ -6,6 +6,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const app = express();
 const fs = require("fs");
+const contentful = require("contentful");
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
@@ -44,6 +45,12 @@ db.serialize(() => {
     });
   }
 });
+
+// init contentful
+const client = contentful.createClient({
+  space: process.env.CONTENTFUL_SPACE_ID,
+  accessToken: process.env.CONTENTFUL_TOKEN
+})
 
 // http://expressjs.com/en/starter/basic-routing.html
 app.get("/", (request, response) => {
@@ -104,6 +111,10 @@ app.get("/clearDreams", (request, response) => {
 const cleanseString = function(string) {
   return string.replace(/</g, "&lt;").replace(/>/g, "&gt;");
 };
+
+app.get("/entries", (request, response) => {
+  client.getEntries
+})
 
 // listen for requests :)
 var listener = app.listen(process.env.PORT, () => {
