@@ -14,42 +14,28 @@
     <!-- import the webpage's stylesheet -->
     <link rel="stylesheet" href="/style.css">
     
+    <!-- Vue.js dev -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+
     <!-- import the webpage's client-side javascript file -->
     <script src="/client.js" defer></script>
   </head>
-  <body>
+  <body id="app">
     <header>
       <h1>
-        A Dream of the Future
+        {{title}}
       </h1>
     </header>
 
     <main>
-      <p class="bold">Oh hi,</p>
-      
-      <p>Tell me your hopes and dreams:</p>
-      
-      <form>
-        <input name="dream" aria-label="a new dream" type="text" maxlength="100" placeholder="Dreams!">
-        <button type="submit" id="submit-dream">Submit Dream</button>
-      </form>
-      
-      <section class="dreams">
-        <ul id="dreams"></ul>
-        <button id="clear-dreams">
-          Clear Dreams
-        </button>
-      </section>
+      <button v-on:click="getEntries">
+        Get Entries
+      </button>
       
     </main>
 
     <footer>
-      Made with <a href="https://glitch.com">Glitch</a>!
+      
     </footer>
-
-    <!-- include the Glitch button to show what the webpage is about and
-          to make it easier for folks to view source and remix -->
-    <div class="glitchButton" style="position:fixed;top:20px;right:20px;"></div>
-    <script src="https://button.glitch.me/button.js" defer></script>
   </body>
 </html>
