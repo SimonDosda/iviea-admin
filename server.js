@@ -36,11 +36,11 @@ app.get("/", (request, response) => {
 app.get("/entries", async (request, response) => {
   const entries = await client.entry.getMany({
     query: {
-      skip: 10,
+      skip: 0,
       limit: 100,
     },
   })
-  return entries
+  response.send(entries.items);
 })
 
 // listen for requests :)

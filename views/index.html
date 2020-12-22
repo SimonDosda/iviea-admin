@@ -32,8 +32,9 @@
         <button v-on:click="getEntries">
           Get Entries
         </button>
-        <div>
-          {{entries}}
+        <div v-for="entry in entries">
+          {{entry.sys.contentType}}
+          {{entry.fields.title?.en }}
         </div>
       </main>
 
