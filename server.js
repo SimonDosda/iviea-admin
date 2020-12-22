@@ -9,6 +9,7 @@ const contentful = require('contentful-management');
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use('/contentful-api', protectedRoute);
+app.use('/printful-api', protectedRoute)
 
 // http://expressjs.com/en/starter/static-files.html
 app.use(express.static("public"));
@@ -33,6 +34,7 @@ app.get("/", (request, response) => {
   response.sendFile(`${__dirname}/views/index.html`);
 });
 
+// Contentful API
 app.get("/contentful-api/entries", async (request, response) => {
   const entries = await client.entry.getMany({
     query: {
@@ -41,6 +43,19 @@ app.get("/contentful-api/entries", async (request, response) => {
     },
   })
   response.send(entries.items);
+})
+
+// Printful API
+app.get("/printful-api/products", async (request, response) => {
+  const res = await fetch("https://api.printful.com/sync/products", {
+        method: "GET",
+       headers: { 
+         "Content-Type": "application/json", 
+         "Authorization": 'Basic ' + process.env.PRINTFUL_API_KEY
+       }
+      });
+  const result = await res.json();
+  response.send(result);
 })
 
 // listen for requests :)
