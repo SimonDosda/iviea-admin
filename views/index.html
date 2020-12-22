@@ -33,8 +33,9 @@
           Get Entries
         </button>
         <div v-for="entry in entries">
-          {{entry.sys.contentType}}
-          {{entry.fields.title?.en }}
+          {{ entry.sys.contentType.sys.id}} - 
+          {{ entry.fields.title?.en }}
+          {{ entry.fields.name?.en }}
         </div>
       </main>
 
