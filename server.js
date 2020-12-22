@@ -8,6 +8,12 @@ const fs = require("fs");
 const contentful = require('contentful-management');
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+app.use(function (request, response, next) {
+  if (request.headers.authorization === process.env.PASSWORD) {
+    response.
+  }
+  next();
+});
 
 // http://expressjs.com/en/starter/static-files.html
 app.use(express.static("public"));
@@ -31,16 +37,6 @@ const client = contentful.createClient(
 app.get("/", (request, response) => {
   response.sendFile(`${__dirname}/views/index.html`);
 });
-
-app.post("/authenticate", async (request, response) => {
-  const entries = await client.entry.getMany({
-    query: {
-      skip: 0,
-      limit: 100,
-    },
-  })
-  response.send(entries.items);
-})
 
 app.get("/entries", async (request, response) => {
   const entries = await client.entry.getMany({
