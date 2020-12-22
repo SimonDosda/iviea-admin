@@ -20,22 +20,26 @@
     <!-- import the webpage's client-side javascript file -->
     <script src="/client.js" defer></script>
   </head>
-  <body id="app">
-    <header>
-      <h1>
-        {{title}}
-      </h1>
-    </header>
+  <body>
+    <div id="app">
+      <header>
+        <h1>
+          {{ title }}
+        </h1>
+      </header>
 
-    <main>
-      <button v-on:click="getEntries">
-        Get Entries
-      </button>
-      
-    </main>
+      <main>
+        <button v-on:click="getEntries">
+          Get Entries
+        </button>
+        <div>
+          {{entries}}
+        </div>
+      </main>
 
-    <footer>
-      
-    </footer>
+      <footer>
+
+      </footer>
+    </div>
   </body>
 </html>

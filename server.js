@@ -5,7 +5,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const app = express();
 const fs = require("fs");
-const contentful = require("contentful");
+const contentful = require('contentful-management');
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
