@@ -19,10 +19,13 @@ const sqlite3 = require("sqlite3").verbose();
 const db = new sqlite3.Database(dbFile);
 
 // init contentful
-const client = contentful.createClient({
-  space: process.env.CONTENTFUL_SPACE_ID,
-  accessToken: process.env.CONTENTFUL_TOKEN
-})
+const client = contentful.createClient(
+  { accessToken: process.env.CONTENTFUL_TOKEN },
+  { type: 'plain', defaults: {
+    spaceId: process.env.CONTENTFUL_SPACE_ID,
+    environmentId: process.env.CONTENTFUL_ENV_ID
+  } }
+)
 
 // http://expressjs.com/en/starter/basic-routing.html
 app.get("/", (request, response) => {
@@ -31,7 +34,12 @@ app.get("/", (request, response) => {
 
 
 app.get("/entries", async (request, response) => {
-  const entries = await client.getEntries()
+  const entries = await client.entry.getMany({
+    query: {
+      skip: 10,
+      limit: 100,
+    },
+  })
   return entries
 })
 
