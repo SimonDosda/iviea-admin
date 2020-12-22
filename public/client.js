@@ -3,7 +3,8 @@ const app = new Vue({
   data: {
     title: 'Syncful',
     token: null,
-    entries: null
+    entries: null,
+    products: null
   },
   methods: {
     getEntries: function () {
@@ -18,6 +19,19 @@ const app = new Vue({
       .then(response => {
         this.entries = response;
       });
-    }  
+    },
+    getProducts: function () {
+      fetch("/printful-api/products", {
+       method: "GET",
+       headers: { 
+         "Content-Type": "application/json", 
+         "Authorization": this.token
+       }
+      })
+      .then(res => res.json())
+      .then(response => {
+        this.products = response;
+      });
+    },
   }
 })

@@ -33,6 +33,9 @@
         <button v-on:click="getEntries">
           Get Entries
         </button>
+        <button v-on:click="getProducts">
+          Get Products
+        </button>
         <div v-for="entry in entries">
           {{ entry.sys.contentType.sys.id}} - 
           {{ entry.fields.title?.en }}

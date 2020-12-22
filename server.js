@@ -6,6 +6,7 @@ const bodyParser = require("body-parser");
 const app = express();
 const fs = require("fs");
 const contentful = require('contentful-management');
+const fetch = require('node-fetch');
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use('/contentful-api', protectedRoute);
@@ -64,7 +65,6 @@ var listener = app.listen(process.env.PORT, () => {
 });
 
 function protectedRoute(request, response, next) {
-  console.log(request.headers.authorization === process.env.PASSWORD)
   if (request.headers.authorization === process.env.PASSWORD) {
     next();
   } else {

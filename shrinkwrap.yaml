@@ -1,6 +1,7 @@
 dependencies:
   contentful-management: 7.5.1
   express: 4.17.1
+  node-fetch: 2.6.1
   sqlite3: 4.1.1
 packages:
   /abbrev/1.1.1:
@@ -686,6 +687,12 @@ packages:
       node: '>= 0.6'
     resolution:
       integrity: sha512-hZXc7K2e+PgeI1eDBe/10Ard4ekbfrrqG8Ep+8Jmf4JID2bNg7NvCPOZN+kfF574pFQI7mum2AUqDidoKqcTOw==
+  /node-fetch/2.6.1:
+    dev: false
+    engines:
+      node: 4.x || >=6.0.0
+    resolution:
+      integrity: sha512-V4aYg89jEoVRxRb2fJdAg8FHvI7cEyYdVAh94HH0UIK8oJxUfkjlDQN9RbMx+bEjP7+ggMiFRprSti032Oipxw==
   /node-pre-gyp/0.11.0:
     dependencies:
       detect-libc: 1.0.3
@@ -1183,4 +1190,5 @@ shrinkwrapVersion: 3
 specifiers:
   contentful-management: ^7.5.0
   express: ^4.17.1
+  node-fetch: ^2.6.1
   sqlite3: ^4.1.1
