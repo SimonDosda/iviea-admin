@@ -29,6 +29,10 @@
       </header>
 
       <main>
+        <input type="password" :value="password">
+        <button v-on:click="authenticate">
+          Unlock
+        </button>
         <button v-on:click="getEntries">
           Get Entries
         </button>
