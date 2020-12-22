@@ -7,7 +7,7 @@ const app = new Vue({
   },
   methods: {
     getEntries: function () {
-      fetch("/entries", {
+      fetch("/contentful-api/entries", {
         method: "GET",
        headers: { 
          "Content-Type": "application/json", 

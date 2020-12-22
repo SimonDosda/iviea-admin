@@ -8,12 +8,7 @@ const fs = require("fs");
 const contentful = require('contentful-management');
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-app.use(function (request, response, next) {
-  if (request.headers.authorization === process.env.PASSWORD) {
-    response.
-  }
-  next();
-});
+app.use('/contentful-api', protectedRoute);
 
 // http://expressjs.com/en/starter/static-files.html
 app.use(express.static("public"));
@@ -38,7 +33,7 @@ app.get("/", (request, response) => {
   response.sendFile(`${__dirname}/views/index.html`);
 });
 
-app.get("/entries", async (request, response) => {
+app.get("/contentful-api/entries", async (request, response) => {
   const entries = await client.entry.getMany({
     query: {
       skip: 0,
@@ -52,3 +47,11 @@ app.get("/entries", async (request, response) => {
 var listener = app.listen(process.env.PORT, () => {
   console.log(`Your app is listening on port ${listener.address().port}`);
 });
+
+function protectedRoute(request, response, next) {
+  console.log(request.headers.authorization === process.env.PASSWORD)
+  if (request.headers.authorization === process.env.PASSWORD) {
+    next();
+  }
+  response.status(400).send('Unauthorized');
+}
