@@ -52,6 +52,7 @@ function protectedRoute(request, response, next) {
   console.log(request.headers.authorization === process.env.PASSWORD)
   if (request.headers.authorization === process.env.PASSWORD) {
     next();
+  } else {
+    response.status(400).send('Unauthorized');
   }
-  response.status(400).send('Unauthorized');
 }
