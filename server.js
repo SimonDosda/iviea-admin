@@ -55,7 +55,7 @@ app.get("/printful-api/products", async (request, response) => {
          "Authorization": `Basic ${process.env.PRINTFUL_API_KEY}`
        }
       });
-  const result = await res.json();
+  const {result} = await res.json();
   response.send(result);
 })
 
