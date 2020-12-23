@@ -52,7 +52,7 @@ app.get("/printful-api/products", async (request, response) => {
         method: "GET",
        headers: { 
          "Content-Type": "application/json", 
-         "Authorization": 'Basic ' + process.env.PRINTFUL_API_KEY
+         "Authorization": `Basic ${process.env.PRINTFUL_API_KEY}`
        }
       });
   const result = await res.json();
