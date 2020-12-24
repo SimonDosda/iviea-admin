@@ -29,22 +29,28 @@
       </header>
 
       <main>
+        <label >Password</label>
         <input type="password" v-model="token">
-        <button v-on:click="getEntries">
-          Get Entries
-        </button>
-        <div v-for="entry in entries">
-          {{ entry.sys.contentType.sys.id}} - 
-          {{ entry.fields.title?.en }}
-          {{ entry.fields.name?.en }}
+        
+        <div>
+          <button v-on:click="getEntries">
+            Get Entries
+          </button>
+          <div v-for="entry in entries" class="row">
+            {{ entry.sys.contentType.sys.id}} - 
+            {{ entry.fields.title?.en }}
+            {{ entry.fields.name?.en }}
+          </div>
         </div>
         
-        <button v-on:click="getProducts">
-          Get Products
-        </button>
-        <div v-for="product in products">
-          <img :src="product.thumbnail_url" />
-          {{ product.name }} 
+        <div>
+          <button v-on:click="getProducts">
+            Get Products
+          </button>
+          <div v-for="product in products" class="row">
+            <img :src="product.thumbnail_url" />
+            {{ product.name }} 
+          </div>
         </div>
       </main>
 
