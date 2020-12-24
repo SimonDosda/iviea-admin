@@ -45,8 +45,9 @@
             Get Products
           </button>
           <div v-for="product in products" class="row">
+            <span>{{ product.id }} </span>
             <img :src="product.thumbnail_url" />
-            {{ product.name }} 
+            <span>{{ product.name }}</span>
           </div>
         </div>
       </main>
