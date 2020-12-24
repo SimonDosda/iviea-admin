@@ -22,18 +22,15 @@
   </head>
   <body>
     <div id="app">
-      <header>
-        <h1>
-          {{ title }}
-        </h1>
-      </header>
-
       <main>
-        <label >Password</label>
-        <input type="password" v-model="token">
+        <h1>{{ title }}</h1>
+        <label for="password">
+          Password
+          <input type="password" v-model="token" id="password">
+        </label>
         
         <div>
-          <button v-on:click="getEntries">
+          <button v-on:click="getEntries" class="btn">
             Get Entries
           </button>
           <div v-for="entry in entries" class="row">
@@ -44,7 +41,7 @@
         </div>
         
         <div>
-          <button v-on:click="getProducts">
+          <button v-on:click="getProducts" class="btn">
             Get Products
           </button>
           <div v-for="product in products" class="row">

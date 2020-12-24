@@ -1,4 +1,24 @@
+main {
+  padding: 10px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-gap: 15px;
+  align-items: baseline;
+}
+
+.btn {
+  padding: 5px 10px;
+  background: white;
+  border: 2px solid darkblue;
+  color: darkblue;
+  width: 100%;
+}
+.btn:hover, .btn:focus , .btn:active {
+  font-weight: bold;
+}
+
 .row {
+  margin-top: 5px;
   display: flex;
   align-items: center;
 }
