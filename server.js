@@ -46,6 +46,16 @@ app.get("/contentful-api/entries", async (request, response) => {
   response.send(entries.items);
 })
 
+app.post("/contentful-api/entries", async (request, response) => {
+  const entries = await client.entry.add({
+    query: {
+      fields: 0,
+      limit: 100,
+    },
+  })
+  response.send(entries.items);
+})
+
 // Printful API
 app.get("/printful-api/products", async (request, response) => {
   const res = await fetch("https://api.printful.com/sync/products", {
