@@ -47,11 +47,14 @@ app.get("/contentful-api/entries", async (request, response) => {
 })
 
 app.post("/contentful-api/entries", async (request, response) => {
-  const entries = await client.entry.create({content}'product', {
-    query: {
+  const entries = await client.entry.create(
+    {
+      contentTypeId: 'product'
+    }, 
+    {
       fields: {name: {en: "distant"}, price: {en: 45}}
-    },
-  })
+    }
+  )
   response.send(entries);
 })
 
