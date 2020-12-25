@@ -49,8 +49,7 @@ app.get("/contentful-api/entries", async (request, response) => {
 app.post("/contentful-api/entries", async (request, response) => {
   const entries = await client.entry.add({
     query: {
-      fields: 0,
-      limit: 100,
+      fields: {name: {en: "distant"}, price: {en: 45}}
     },
   })
   response.send(entries.items);
