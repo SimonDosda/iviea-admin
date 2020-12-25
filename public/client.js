@@ -20,6 +20,16 @@ const app = new Vue({
         this.entries = response;
       });
     },
+    addEntry: function () {
+      fetch("/contentful-api/entries", {
+        method: "POST",
+        headers: { 
+         "Content-Type": "application/json", 
+         "Authorization": this.token
+       }
+      })
+      .then(res => res.json());
+    },
     getProducts: function () {
       fetch("/printful-api/products", {
        method: "GET",

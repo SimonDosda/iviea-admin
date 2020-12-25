@@ -47,12 +47,13 @@ app.get("/contentful-api/entries", async (request, response) => {
 })
 
 app.post("/contentful-api/entries", async (request, response) => {
-  const entries = await client.entry.add({
+  const entries = await client.entry.headers(
+  {X-Contentful-Content-Type: 2PqfXUJwE8qSYKuM0U6w8M}).create({
     query: {
       fields: {name: {en: "distant"}, price: {en: 45}}
     },
   })
-  response.send(entries.items);
+  response.send(entries);
 })
 
 // Printful API
