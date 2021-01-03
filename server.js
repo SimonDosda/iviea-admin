@@ -43,7 +43,7 @@ app.get("/contentful-api/entries", async (request, response) => {
       limit: 100,
     },
   })
-  response.send(entries.items);
+  response.send(entries.items.filter(item => item.sys.contentType.sys.id === 'product'));
 })
 
 app.post("/contentful-api/entries", async (request, response) => {
