@@ -5,7 +5,6 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const app = express();
 const fs = require("fs");
-const contentful = require('contentful-management');
 const fetch = require('node-fetch');
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -15,20 +14,14 @@ app.use('/printful-api', protectedRoute)
 // http://expressjs.com/en/starter/static-files.html
 app.use(express.static("public"));
 
+const {getEntries} = require('./utils/contentful');
+
 // init sqlite db
 const dbFile = "./.data/sqlite.db";
 const dbExists = fs.existsSync(dbFile);
 const sqlite3 = require("sqlite3").verbose();
 const db = new sqlite3.Database(dbFile);
 
-// init contentful
-const client = contentful.createClient(
-  { accessToken: process.env.CONTENTFUL_TOKEN },
-  { type: 'plain', defaults: {
-    spaceId: process.env.CONTENTFUL_SPACE_ID,
-    environmentId: process.env.CONTENTFUL_ENV_ID
-  } }
-)
 
 // http://expressjs.com/en/starter/basic-routing.html
 app.get("/", (request, response) => {
@@ -37,24 +30,12 @@ app.get("/", (request, response) => {
 
 // Contentful API
 app.get("/contentful-api/entries", async (request, response) => {
-  const entries = await client.entry.getMany({
-    query: {
-      skip: 0,
-      limit: 100,
-    },
-  })
+  const entries = 
   response.send(entries.items.filter(item => item.sys.contentType.sys.id === 'product'));
 })
 
 app.post("/contentful-api/entries", async (request, response) => {
-  const entries = await client.entry.create(
-    {
-      contentTypeId: 'product'
-    }, 
-    {
-      fields: {name: {en: "distant"}, price: {en: 45}}
-    }
-  )
+  const entries = null;
   response.send(entries);
 })
 
