@@ -19,4 +19,4 @@ async function createEntry(contentTypeId, fields) {
   return await client.entry.create({ contentTypeId }, { fields });
 }
 
-module.exports = {getEntries, }
+module.exports = {getEntries, createEntry};

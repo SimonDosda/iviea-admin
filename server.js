@@ -4,8 +4,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const app = express();
-const fs = require("fs");
-const fetch = require('node-fetch');
+
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use('/contentful-api', protectedRoute);
@@ -14,13 +13,8 @@ app.use('/printful-api', protectedRoute)
 // http://expressjs.com/en/starter/static-files.html
 app.use(express.static("public"));
 
-const {getEntries} = require('./utils/contentful');
-
-// init sqlite db
-const dbFile = "./.data/sqlite.db";
-const dbExists = fs.existsSync(dbFile);
-const sqlite3 = require("sqlite3").verbose();
-const db = new sqlite3.Database(dbFile);
+const { getEntries, createEntry } = require('./utils/contentful');
+const { getProducts } = require('./utils/printful');
 
 
 // http://expressjs.com/en/starter/basic-routing.html
@@ -30,25 +24,18 @@ app.get("/", (request, response) => {
 
 // Contentful API
 app.get("/contentful-api/entries", async (request, response) => {
-  const entries = 
+  const entries = await getEntries();
   response.send(entries.items.filter(item => item.sys.contentType.sys.id === 'product'));
 })
 
 app.post("/contentful-api/entries", async (request, response) => {
-  const entries = null;
+  const entries = await createEntry('product', {name: {en: 'test'}, price: {en: '12'}});
   response.send(entries);
 })
 
 // Printful API
 app.get("/printful-api/products", async (request, response) => {
-  const res = await fetch("https://api.printful.com/sync/products", {
-        method: "GET",
-       headers: { 
-         "Content-Type": "application/json", 
-         "Authorization": `Basic ${process.env.PRINTFUL_API_KEY}`
-       }
-      });
-  const {result} = await res.json();
+  const result = await getProducts;
   response.send(result);
 })
 
