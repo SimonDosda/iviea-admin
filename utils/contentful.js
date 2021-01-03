@@ -9,10 +9,11 @@ const client = contentful.createClient(
   } }
 )
 
-async function getEntries() {
-  return await client.entry.getMany({
+async function getEntries(contentTypes) {
+  const entries = await client.entry.getMany({
     query: { skip: 0, limit: 100}
-  })
+  });
+  return entries.filter(item => contentTypes.includes(item.sys.contentType.sys.id));
 } 
 
 async function createEntry(contentTypeId, fields) {

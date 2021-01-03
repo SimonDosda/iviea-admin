@@ -30,20 +30,22 @@
         </label>
         
         <div>
-          <button v-on:click="getEntries" class="btn">
-            Get Entries
+          <button v-on:click="getProducts" class="btn">
+            Get Products
           </button>
+          
+          <button v-on:click="addEntry" class="btn">
+            Add Entry
+          </button>
+        </div>
+        
+        <div>
           <div v-for="entry in entries" class="row">
             {{ entry.sys.contentType.sys.id}} - 
             {{ entry.fields.title?.en }}
             {{ entry.fields.name?.en }}
           </div>
-        </div>
-        
-        <div>
-          <button v-on:click="getProducts" class="btn">
-            Get Products
-          </button>
+          
           <div v-for="product in products" class="row">
             <span>{{ product.id }} </span>
             <img :src="product.thumbnail_url" />
@@ -52,11 +54,7 @@
         </div>
       </main>
 
-      <footer>
-        <button v-on:click="addEntry" class="btn">
-          Add Entry
-        </button>
-      </footer>
+      <footer></footer>
     </div>
   </body>
 </html>

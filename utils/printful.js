@@ -11,3 +11,5 @@ async function getProducts() {
   const {result} = await res.json();
   return result;
 }
+
+module.exports = { getProducts };

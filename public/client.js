@@ -7,8 +7,8 @@ const app = new Vue({
     products: null
   },
   methods: {
-    getEntries: function () {
-      fetch("/contentful-api/entries", {
+    getProducts: function () {
+      fetch("/api/products", {
         method: "GET",
        headers: { 
          "Content-Type": "application/json", 
@@ -16,8 +16,9 @@ const app = new Vue({
        }
       })
       .then(res => res.json())
-      .then(response => {
-        this.entries = response;
+      .then(({entries, products}) => {
+        this.entries = entries;
+        this.products = products;
       });
     },
     addEntry: function () {
@@ -29,19 +30,6 @@ const app = new Vue({
        }
       })
       .then(res => res.json());
-    },
-    getProducts: function () {
-      fetch("/printful-api/products", {
-       method: "GET",
-       headers: { 
-         "Content-Type": "application/json", 
-         "Authorization": this.token
-       }
-      })
-      .then(res => res.json())
-      .then(response => {
-        this.products = response;
-      });
-    },
+    }
   }
 })

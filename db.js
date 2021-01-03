@@ -1,4 +1,3 @@
-
 // init sqlite db
 const fs = require("fs");
 const dbFile = "./.data/sqlite.db";
