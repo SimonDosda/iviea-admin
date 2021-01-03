@@ -16,7 +16,7 @@ async function getEntries(contentTypes) {
 
 async function getProductEntries() {
   const entries = await getEntries(['product', 'variant']);
-  return entries.reduce((res, entry) => {
+  const entriesById = entries.reduce((res, entry) => {
     if (entry.sys.contentType.sys.id === 'product') {
       if (!(entry.sys.id in res)) {
         res[entry.sys.id] = {variants: []}
@@ -32,6 +32,7 @@ async function getProductEntries() {
     }
     return res;
   }, {})
+  return Object.values(entriesById);
 }
 
 async function createEntry(contentTypeId, fields) {

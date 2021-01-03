@@ -9,8 +9,8 @@ app.use('/api', protectedRoute);
 // http://expressjs.com/en/starter/static-files.html
 app.use(express.static("public"));
 
-const { getProductEntries, createEntry } = require('./utils/contentful');
-const { getProducts, getVariants } = require('./utils/printful');
+const contentful = require('./utils/contentful');
+const printful = require('./utils/printful');
 
 
 // http://expressjs.com/en/starter/basic-routing.html
@@ -20,14 +20,13 @@ app.get("/", (request, response) => {
 
 // Fetch data
 app.get("/api/products", async (request, response) => {
-  const entries = await getProductEntries();
-  const products = await getProducts();
-  const variants = await getVariants();
-  response.send({entries, products, variants});
+  const contentful = await contentful.getProductEntries();
+  const prinful = await printful.getVariants();
+  response.send({contentful, prinful});
 })
 
 app.post("/api/entries", async (request, response) => {
-  const entries = await createEntry('product', {name: {en: 'test'}, price: {en: '12'}});
+  const entries = await contentful.createEntry('product', {name: {en: 'test'}, price: {en: '12'}});
   response.send(entries);
 })
 
