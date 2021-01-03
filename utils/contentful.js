@@ -14,6 +14,18 @@ async function getEntries(contentTypes) {
   return entries.items.filter(item => contentTypes.includes(item.sys.contentType.sys.id));
 } 
 
+async function getProductEntries() {
+  const entries = await getEntries(['product', 'variant']);
+  return entries.reduce((res, entry) => {
+    if (entry.sys.contentType.sys.id === 'product') {
+      if (!(entry.sys.id in res)) {
+        
+      }
+      res[]
+    }
+  }, {})
+}
+
 async function createEntry(contentTypeId, fields) {
   return await client.entry.create({ contentTypeId }, { fields });
 }
