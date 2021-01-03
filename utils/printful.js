@@ -27,7 +27,7 @@ async function getProductWithVariants(productId) {
 async function getVariants() {
   const products = await getProducts();
   const variants = [];
-  for (i = 0, i < products.length, i++) {
+  for (let i = 0; i < products.length; i++) {
     const productWithVariant = await getProductWithVariants(products[i].id);
     variants.push(productWithVariant);
   }
