@@ -12,7 +12,7 @@ async function getProducts() {
   return result;
 }
 
-async function getProducWithVariants(productId) {
+async function getProductWithVariants(productId) {
   const res = await fetch(`https://api.printful.com/sync/products/${productId}`, {
     method: "GET",
     headers: { 
@@ -24,6 +24,10 @@ async function getProducWithVariants(productId) {
   return result;
 }
 
-async 
+async function getVariants() {
+  const products = await getProducts();
+  const variants = products.map(async ({id}) => await getProductWithVariants(id));
+  return variants;
+}
 
-module.exports = { getProducts };
+module.exports = { getProducts, getProductWithVariants, getVariants };

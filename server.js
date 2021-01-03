@@ -10,7 +10,7 @@ app.use('/api', protectedRoute);
 app.use(express.static("public"));
 
 const { getEntries, createEntry } = require('./utils/contentful');
-const { getProducts } = require('./utils/printful');
+const { getProducts, getVariants } = require('./utils/printful');
 
 
 // http://expressjs.com/en/starter/basic-routing.html
@@ -22,7 +22,8 @@ app.get("/", (request, response) => {
 app.get("/api/products", async (request, response) => {
   const entries = await getEntries(['product', 'variant']);
   const products = await getProducts();
-  response.send({entries, products});
+  const variants = await getVariants();
+  response.send({entries, products, variants});
 })
 
 app.post("/api/entries", async (request, response) => {
