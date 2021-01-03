@@ -9,7 +9,7 @@ app.use('/api', protectedRoute);
 // http://expressjs.com/en/starter/static-files.html
 app.use(express.static("public"));
 
-const { getEntries, createEntry } = require('./utils/contentful');
+const { getProductEntries, createEntry } = require('./utils/contentful');
 const { getProducts, getVariants } = require('./utils/printful');
 
 
@@ -20,7 +20,7 @@ app.get("/", (request, response) => {
 
 // Fetch data
 app.get("/api/products", async (request, response) => {
-  const entries = await getEntries(['product', 'variant']);
+  const entries = await getProductEntries();
   const products = await getProducts();
   const variants = await getVariants();
   response.send({entries, products, variants});

@@ -19,10 +19,18 @@ async function getProductEntries() {
   return entries.reduce((res, entry) => {
     if (entry.sys.contentType.sys.id === 'product') {
       if (!(entry.sys.id in res)) {
-        
-      }
-      res[]
+        res[entry.sys.id] = {variants: []}
+      } 
+      res[entry.sys.id].product = entry.fields
+    } else {
+      const productId = entry.fields.product.en.sys.id;
+      delete entry.fields.product;
+      if (!(productId in res)) {
+        res[productId] = {variants: []}
+      } 
+      res[productId].variants.push(entry.fields);
     }
+    return res;
   }, {})
 }
 
@@ -30,4 +38,4 @@ async function createEntry(contentTypeId, fields) {
   return await client.entry.create({ contentTypeId }, { fields });
 }
 
-module.exports = {getEntries, createEntry};
+module.exports = {getEntries, getProductEntries, createEntry};
