@@ -36,8 +36,8 @@ async function getAllProductWithVariants() {
 
 function productToEntry(product) {
   return {
-    product: product.sync_product,
-    variants: product.sync_variants
+    product: parseProduct(product.sync_product),
+    variants: product.sync_variants.map(parseVariant)
   }
   
 }
@@ -45,9 +45,16 @@ function productToEntry(product) {
 function parseProduct(product) {
   return {
     name: product.name,
-    sku: product.external_id,
-    price: 0,
-    images: []
+    sku: product.external_id
+  }
+}
+
+function parseVariant(variant) {
+  return {
+    name: variant.name,
+    sku: variant.external_id,
+    price: variant.retail_price,
+    images: variant.files.map(file => file.preview_url)
   }
 }
 
