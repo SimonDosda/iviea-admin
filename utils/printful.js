@@ -57,6 +57,22 @@ async function getProductInfo(productId) {
   return result;
 }
 
+async function getVariantShippingRates(variantId, country, currency) {
+  const res = await fetch(
+    `https://api.printful.com/shipping/rates`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Basic ${process.env.PRINTFUL_API_KEY}`
+      },
+      body: {recipient, items: [{quantity: 1, variant_id: variantId}], currency}
+    }
+  );
+  const { result } = await res.json();
+  return result;
+}
+
 
 async function getAllProductWithVariants() {
   const products = await getProducts();
@@ -103,3 +119,16 @@ module.exports = {
   getProductEntries,
   productToEntry
 };
+
+const recipientByCountry = {
+  FR: {
+    address1: "1 Avenue Marceau",
+    city: "Courbevoie",
+    country_code: "FR"
+  },
+  UK: {
+    address1: "10 Downing Street",
+    city: "London",
+    country_code: "UK", 
+  }
+}
