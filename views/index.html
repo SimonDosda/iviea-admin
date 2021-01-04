@@ -39,7 +39,16 @@
         </button>
 
         <div v-for="entry in entries" class="row">
-          {{ entry.product.name.en}} - {{ entry.variants.length }}
+          {{ entry.product.name.en}}
+          <div v-for="variant in entry.variants" class="row">
+            {{ variant.name.en }}
+            {{ variant.price.en }}
+            {{variant.images}}
+            <div v-for="image in variant.images">
+              {{image.en}}
+              <img v-bind:src="image.en"/>
+            </div>
+          </div>
         </div>
 
         <button v-on:click="addEntry" class="btn">
