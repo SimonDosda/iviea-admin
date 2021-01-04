@@ -37,6 +37,11 @@ async function getAllProductWithVariants() {
   return variants;
 }
 
+async function getProductEntries() {
+  const products = await getAllProductWithVariants();
+  return products.map(productToEntry);
+}
+
 function productToEntry(product) {
   return {
     product: parseProduct(product.sync_product),
@@ -53,15 +58,16 @@ function parseProduct(product) {
 
 function parseVariant(variant) {
   return {
-    name: {en: variant.name},
-    sku: {en: variant.external_id},
-    price: {en: variant.retail_price},
-    images: variant.files.map(file => file.preview_url)
+    name: { en: variant.name.split(' - ')[1] },
+    sku: { en: variant.external_id },
+    price: { en: variant.retail_price },
+    images: { en: variant.files.map(file => file.preview_url) }
   };
 }
 
 module.exports = {
   getProducts,
   getProductWithVariants,
-  getAllProductWithVariants
+  getAllProductWithVariants,
+  getProductEntries
 };

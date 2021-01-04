@@ -19,9 +19,11 @@ app.get("/", (request, response) => {
 
 // Fetch data
 app.get("/api/products", async (request, response) => {
-  const contentful = await contentful.getProductEntries();
-  const prinful = await printful.getVariants();
-  response.send({ contentful, prinful });
+  const entries = {
+    contentful: await contentful.getProductEntries(),
+    printful: await printful.getProductEntries()
+  };
+  response.send(entries);
 });
 
 app.post("/api/entries", async (request, response) => {
