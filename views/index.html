@@ -38,15 +38,15 @@
           Get Products
         </button>
 
-        <div v-for="entry in entries" class="row">
-          {{ entry.product.name.en}}
-          <div v-for="variant in entry.variants" class="row">
+        <div v-for="entry in entries" class="product">
+          <h2>
+            {{ entry.product.name.en}}
+          </h2>
+          <div v-for="variant in entry.variants" class="variant">
             {{ variant.name.en }}
             {{ variant.price.en }}
-            {{variant.images}}
-            <div v-for="image in variant.images">
-              {{image.en}}
-              <img v-bind:src="image.en"/>
+            <div v-for="image in variant.images.en" class="image">
+              <img :src="image"/>
             </div>
           </div>
         </div>
