@@ -11,7 +11,7 @@ const app = new Vue({
       {
         name: "all inc. price",
         value: variant =>
-          Math.round(variant.productPrice + variant.shippingRates[0].rate * 12) / 10
+          Math.round((variant.productPrice + variant.shippingRates[0].rate) * 12) / 10
       },
       { name: "retail price", value: variant => variant.price.en }
     ]
