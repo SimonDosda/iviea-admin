@@ -19,10 +19,21 @@ app.get("/", (request, response) => {
 
 // Fetch data
 app.get("/api/products", async (request, response) => {
-  const entries = {
-    contentful: await contentful.getProductEntries(),
-    printful: await printful.getProductEntries()
-  };
+  const contentfulEntries = await contentful.getProductEntries();
+  const printfulEntries = await printful.getProductEntries();
+  const entries = contentfulEntries.reduce((res, entry) => {
+    return {
+      ...res,
+      [entry.product.slug.en]: {
+        product: { ...entry.product, contentful: true, printful: false },
+        variants: entry.variants.map(variant => ({
+          ...variant,
+          contentful: true,
+          printful: false
+        }))
+      }
+    };
+  }, {});
   response.send(entries);
 });
 
