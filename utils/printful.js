@@ -42,18 +42,6 @@ async function getVariantInfo(variantId) {
   return result;
 }
 
-async function getProductInfo(productId) {
-  const res = await fetch(`https://api.printful.com/products/${productId}`, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Basic ${process.env.PRINTFUL_API_KEY}`
-    }
-  });
-  const { result } = await res.json();
-  return result;
-}
-
 async function getVariantShippingRates(variantId, country, currency) {
   const res = await fetch(`https://api.printful.com/shipping/rates`, {
     method: "POST",
@@ -76,6 +64,22 @@ async function getAllProductWithVariants() {
   const variants = [];
   for (let i = 0; i < products.length; i++) {
     const productWithVariant = await getProductWithVariants(products[i].id);
+    variants.push(productWithVariant);
+  }
+  return variants;
+}
+
+async function getAllProductInfo() {
+  const countries = ['FR']
+  const products = await getProducts();
+  const productsInfo = [];
+  for (let i = 0; i < products.length; i++) {
+    const productInfo = await getProductWithVariants(products[i].id);
+    for (let j = 0; j < productInfo.sync_variants.length; j++) {
+      const variant = productInfo.sync_variants[j];
+      const variantInfo = await getVariantInfo(variant.id);
+      for (let )
+    }
     variants.push(productWithVariant);
   }
   return variants;
