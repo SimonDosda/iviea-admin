@@ -1,40 +1,43 @@
 const app = new Vue({
-  el: '#app',
+  el: "#app",
   data: {
-    title: 'Syncful',
+    title: "Syncful",
     token: null,
     entries: [],
     fields: [
-      {name: "name", value: (variant) => variant.name.en},
-      {name: "product price", value: (variant) => variant.productPrice},
-      {name: "shipping", value: (variant) => variant.shippingRates[0].rate},
-      {name: "all inc. price", value: (variant) => (variant.productPrice + variant.shippingRates[0].rate) * 1.2},
-      {name: "retail price", value: (variant) => variant.price.en}
+      { name: "name", value: variant => variant.name.en },
+      { name: "product price", value: variant => variant.productPrice },
+      { name: "shipping", value: variant => variant.shippingRates[0].rate },
+      {
+        name: "all inc. price",
+        value: variant =>
+          Math.round(variant.productPrice + variant.shippingRates[0].rate * 12) / 10
+      },
+      { name: "retail price", value: variant => variant.price.en }
     ]
   },
   methods: {
-    getProducts: function () {
+    getProducts: function() {
       fetch("/api/products", {
         method: "GET",
-       headers: { 
-         "Content-Type": "application/json", 
-         "Authorization": this.token
-       }
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: this.token
+        }
       })
-      .then(res => res.json())
-      .then(({entries}) => {
-        this.entries = entries;
-      });
+        .then(res => res.json())
+        .then(({ entries }) => {
+          this.entries = entries;
+        });
     },
-    addEntry: function () {
+    addEntry: function() {
       fetch("/contentful-api/entries", {
         method: "POST",
-        headers: { 
-         "Content-Type": "application/json", 
-         "Authorization": this.token
-       }
-      })
-      .then(res => res.json());
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: this.token
+        }
+      }).then(res => res.json());
     }
   }
-})
+});

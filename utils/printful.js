@@ -118,12 +118,12 @@ function parseVariant(variant) {
   return {
     name: { en: variant.name.split(" - ")[1] },
     sku: { en: variant.external_id },
-    productPrice: variant.info.price,
-    price: { en: variant.retail_price },
-    shippingRates: [variant.shippingRates.map((shippingRates) => ({
+    productPrice: parseFloat(variant.info.price),
+    price: { en: parseFloat(variant.retail_price) },
+    shippingRates: variant.shippingRates.map(shippingRates => ({
       country: shippingRates.country,
-      rate: shippingRates.shippingRates[0].rate
-    }))],
+      rate: parseFloat(shippingRates.shippingRates[0].rate)
+    })),
     images: { en: variant.files.map(file => file.preview_url) }
   };
 }
