@@ -20,7 +20,7 @@ app.get("/", (request, response) => {
 // Fetch data
 app.get("/api/products", async (request, response) => {
   const contentfulEntries = await contentful.getProductEntries();
-  const products = await printful.getAllProductWithVariants();
+  const products = await printful.getAllProductInfo();
   const printfulEntries = products.map(printful.productToEntry);
   const entries = contentfulEntries.reduce((res, entry) => {
     return {

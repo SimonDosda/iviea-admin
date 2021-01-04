@@ -42,15 +42,14 @@ async function getVariantInfo(variantId) {
   return result;
 }
 
-async function getVariantShippingRates(variantId, country, currency) {
+async function getVariantShippingRates(variantId, recipient, currency) {
   const res = await fetch(`https://api.printful.com/shipping/rates`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
       Authorization: `Basic ${process.env.PRINTFUL_API_KEY}`
     },
-    body: {
-      recipient: recipientByCountry[country],
+    body: {      recipient,
       items: [{ quantity: 1, variant_id: variantId }],
       currency
     }
@@ -70,19 +69,22 @@ async function getAllProductWithVariants() {
 }
 
 async function getAllProductInfo() {
-  const countries = ['FR']
   const products = await getProducts();
   const productsInfo = [];
   for (let i = 0; i < products.length; i++) {
     const productInfo = await getProductWithVariants(products[i].id);
     for (let j = 0; j < productInfo.sync_variants.length; j++) {
       const variant = productInfo.sync_variants[j];
-      const variantInfo = await getVariantInfo(variant.id);
-      for (let )
+      productInfo.sync_variants[j].variantInfo = await getVariantInfo(variant.id);
+      productInfo.sync_variants[j].shippingRatesList = [];
+      for (let k = 0; k < recipients.length; k++) {
+        const shippingRates = await getVariantShippingRates(variant.id, recipients[k], 'EUR');
+        productInfo.sync_variants[j].shippingRatesList.push({country: recipients[k].country_code, shippingRates});
+      }
     }
-    variants.push(productWithVariant);
+    productsInfo.push(productInfo);
   }
-  return variants;
+  return productsInfo;
 }
 
 async function getProductEntries() {
@@ -118,30 +120,31 @@ module.exports = {
   getProductWithVariants,
   getAllProductWithVariants,
   getProductEntries,
-  productToEntry
+  productToEntry,
+  getAllProductInfo
 };
 
-const recipientByCountry = {
-  FR: {
+const recipients = [
+  {
     address1: "1 Avenue Marceau",
     city: "Courbevoie",
     country_code: "FR"
   },
-  UK: {
+  {
     address1: "10 Downing Street",
     city: "London",
     country_code: "GB"
   },
-  US: {
+  {
     address1: "19749 Dearborn St",
     city: "Chatsworth",
     country_code: "US",
     state_code: "CA"
   },
-  CA: {
+  {
     adress1: "453 West 12th Avenue",
     city: "Vancouver",
     country_code: "CA",
     state_code: "BC"
   }
-};
+];
