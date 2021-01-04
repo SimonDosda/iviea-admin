@@ -42,10 +42,21 @@ async function getVariantInfo(variantId) {
   return result;
 }
 
-async function getVariantPrice(variantId) {
-  const {variant} = await getVariantInfo(variantId);
-  return variant.price;
+async function getProductInfo(productId) {
+  const res = await fetch(
+    `https://api.printful.com/products/${productId}`,
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Basic ${process.env.PRINTFUL_API_KEY}`
+      }
+    }
+  );
+  const { result } = await res.json();
+  return result;
 }
+
 
 async function getAllProductWithVariants() {
   const products = await getProducts();
