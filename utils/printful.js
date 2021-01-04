@@ -27,9 +27,9 @@ async function getProductWithVariants(productId) {
   return result;
 }
 
-async function getProductWithVariants(productId) {
+async function getVariantInfo(variantId) {
   const res = await fetch(
-    `https://api.printful.com/products/products/${productId}`,
+    `https://api.printful.com/products/variant/${variantId}`,
     {
       method: "GET",
       headers: {
@@ -40,6 +40,11 @@ async function getProductWithVariants(productId) {
   );
   const { result } = await res.json();
   return result;
+}
+
+async function getVariantPrice(variantId) {
+  const {variant} = await getVariantInfo(variantId);
+  return variant.price;
 }
 
 async function getAllProductWithVariants() {
