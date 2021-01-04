@@ -5,7 +5,11 @@ const app = new Vue({
     token: null,
     entries: [],
     fields: [
-      {name: "name", value: (variant) => variant.product}
+      {name: "name", value: (variant) => variant.name.en},
+      {name: "product price", value: (variant) => variant.productPrice},
+      {name: "shipping", value: (variant) => variant.shippingRates[0].rate},
+      {name: "all inc. price", value: (variant) => (variant.productPrice + variant.shippingRates[0].rate) * 1.2},
+      {name: "retail price", value: (variant) => variant.price.en}
     ]
   },
   methods: {

@@ -20,9 +20,9 @@ main {
 .product {}
 
 .variant {
-  display: flex;
-  align-items: center;
+  display: grid;
   margin: 10px;
+  grid-gap: 20px;
 }
 
 .image {

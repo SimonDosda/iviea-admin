@@ -118,7 +118,7 @@ function parseVariant(variant) {
   return {
     name: { en: variant.name.split(" - ")[1] },
     sku: { en: variant.external_id },
-    product_price: variant.info.price,
+    productPrice: variant.info.price,
     price: { en: variant.retail_price },
     shippingRates: [variant.shippingRates.map((shippingRates) => ({
       country: shippingRates.country,

@@ -42,11 +42,18 @@
           <h2>
             {{ entry.product.name.en}}
           </h2>
+          <div class="variant">
+            <div></div>
+            <div v-for="field in fields">
+              {{field.name}}
+            </div>
+          </div>
           <div v-for="variant in entry.variants" class="variant">
-            {{ variant.name.en }}
-            {{ variant.price.en }}
-            <div v-for="image in variant.images.en" class="image">
-              <img :src="image"/>
+            <div class="image">
+              <img :src="variant.images.en[0]" />
+            </div>
+            <div v-for="field in fields">
+              {{field.value(variant)}}
             </div>
           </div>
         </div>
