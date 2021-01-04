@@ -39,7 +39,7 @@ async function getVariantInfo(variantId) {
     }
   );
   const { result } = await res.json();
-  return result;
+  return result.variant;
 }
 
 async function getVariantShippingRates(variantId, recipient, currency) {
@@ -49,7 +49,8 @@ async function getVariantShippingRates(variantId, recipient, currency) {
       "Content-Type": "application/json",
       Authorization: `Basic ${process.env.PRINTFUL_API_KEY}`
     },
-    body: {      recipient,
+    body: {
+      recipient,
       items: [{ quantity: 1, variant_id: variantId }],
       currency
     }
@@ -74,12 +75,19 @@ async function getAllProductInfo() {
   for (let i = 0; i < products.length; i++) {
     const productInfo = await getProductWithVariants(products[i].id);
     for (let j = 0; j < productInfo.sync_variants.length; j++) {
-      const variant = productInfo.sync_variants[j];
-      productInfo.sync_variants[j].variantInfo = await getVariantInfo(variant.id);
+      const { variant_id } = productInfo.sync_variants[j];
+      productInfo.sync_variants[j].info = await getVariantInfo(variant_id);
       productInfo.sync_variants[j].shippingRatesList = [];
       for (let k = 0; k < recipients.length; k++) {
-        const shippingRates = await getVariantShippingRates(variant.id, recipients[k], 'EUR');
-        productInfo.sync_variants[j].shippingRatesList.push({country: recipients[k].country_code, shippingRates});
+        const shippingRates = await getVariantShippingRates(
+          variant_id,
+          recipients[k],
+          "EUR"
+        );
+        productInfo.sync_variants[j].shippingRatesList.push({
+          country: recipients[k].country_code,
+          shippingRates
+        });
       }
     }
     productsInfo.push(productInfo);
