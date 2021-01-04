@@ -20,7 +20,8 @@ app.get("/", (request, response) => {
 // Fetch data
 app.get("/api/products", async (request, response) => {
   const contentfulEntries = await contentful.getProductEntries();
-  const printfulEntries = await printful.getProductEntries();
+  const products = await printful.getAllProductWithVariants();
+  const printfulEntries = products.map(printful.productToEntry);
   const entries = contentfulEntries.reduce((res, entry) => {
     return {
       ...res,
@@ -48,7 +49,7 @@ app.get("/api/products", async (request, response) => {
       };
     }
   });
-  response.send({entries: Object.values(entries), contentfulEntries, printfulEntries});
+  response.send({entries: Object.values(entries), products});
 });
 
 app.post("/api/entries", async (request, response) => {

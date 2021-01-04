@@ -15,7 +15,7 @@ const app = new Vue({
        }
       })
       .then(res => res.json())
-      .then(entries => {
+      .then(({entries}) => {
         this.entries = entries;
       });
     },

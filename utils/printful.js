@@ -27,6 +27,21 @@ async function getProductWithVariants(productId) {
   return result;
 }
 
+async function getProductWithVariants(productId) {
+  const res = await fetch(
+    `https://api.printful.com/products/products/${productId}`,
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Basic ${process.env.PRINTFUL_API_KEY}`
+      }
+    }
+  );
+  const { result } = await res.json();
+  return result;
+}
+
 async function getAllProductWithVariants() {
   const products = await getProducts();
   const variants = [];
@@ -69,5 +84,6 @@ module.exports = {
   getProducts,
   getProductWithVariants,
   getAllProductWithVariants,
-  getProductEntries
+  getProductEntries,
+  productToEntry
 };
