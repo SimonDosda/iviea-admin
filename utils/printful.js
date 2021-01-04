@@ -43,36 +43,33 @@ async function getVariantInfo(variantId) {
 }
 
 async function getProductInfo(productId) {
-  const res = await fetch(
-    `https://api.printful.com/products/${productId}`,
-    {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Basic ${process.env.PRINTFUL_API_KEY}`
-      }
+  const res = await fetch(`https://api.printful.com/products/${productId}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Basic ${process.env.PRINTFUL_API_KEY}`
     }
-  );
+  });
   const { result } = await res.json();
   return result;
 }
 
 async function getVariantShippingRates(variantId, country, currency) {
-  const res = await fetch(
-    `https://api.printful.com/shipping/rates`,
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Basic ${process.env.PRINTFUL_API_KEY}`
-      },
-      body: {recipient, items: [{quantity: 1, variant_id: variantId}], currency}
+  const res = await fetch(`https://api.printful.com/shipping/rates`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Basic ${process.env.PRINTFUL_API_KEY}`
+    },
+    body: {
+      recipient: recipientByCountry[country],
+      items: [{ quantity: 1, variant_id: variantId }],
+      currency
     }
-  );
+  });
   const { result } = await res.json();
   return result;
 }
-
 
 async function getAllProductWithVariants() {
   const products = await getProducts();
@@ -129,6 +126,18 @@ const recipientByCountry = {
   UK: {
     address1: "10 Downing Street",
     city: "London",
-    country_code: "UK", 
+    country_code: "GB"
+  },
+  US: {
+    address1: "19749 Dearborn St",
+    city: "Chatsworth",
+    country_code: "US",
+    state_code: "CA"
+  },
+  CA: {
+    adress1: "453 West 12th Avenue",
+    city: "Vancouver",
+    country_code: "CA",
+    state_code: "BC"
   }
-}
+};
