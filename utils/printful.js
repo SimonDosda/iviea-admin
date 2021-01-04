@@ -51,14 +51,14 @@ function productToEntry(product) {
 
 function parseProduct(product) {
   return {
-    name: product.name,
-    sku: product.external_id
+    name: { en: product.name },
+    sku: { en: product.external_id }
   };
 }
 
 function parseVariant(variant) {
   return {
-    name: { en: variant.name.split(' - ')[1] },
+    name: { en: variant.name.split(" - ")[1] },
     sku: { en: variant.external_id },
     price: { en: variant.retail_price },
     images: { en: variant.files.map(file => file.preview_url) }

@@ -3,8 +3,7 @@ const app = new Vue({
   data: {
     title: 'Syncful',
     token: null,
-    entries: null,
-    products: null
+    entries: []
   },
   methods: {
     getProducts: function () {
@@ -16,9 +15,8 @@ const app = new Vue({
        }
       })
       .then(res => res.json())
-      .then(({entries, products}) => {
+      .then(entries => {
         this.entries = entries;
-        this.products = products;
       });
     },
     addEntry: function () {

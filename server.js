@@ -24,7 +24,7 @@ app.get("/api/products", async (request, response) => {
   const entries = contentfulEntries.reduce((res, entry) => {
     return {
       ...res,
-      [entry.product.slug.en]: {
+      [entry.product.sku.en]: {
         product: { ...entry.product, contentful: true, printful: false },
         variants: entry.variants.map(variant => ({
           ...variant,
@@ -34,7 +34,21 @@ app.get("/api/products", async (request, response) => {
       }
     };
   }, {});
-  response.send(entries);
+  printfulEntries.forEach(entry => {
+    if (entry.product.sku.en in entries) {
+      entries[entry.product.sku.en].printful = true;
+    } else {
+      entries[entry.product.sku.en] = {
+        product: { ...entry.product, contentful: false, printful: true },
+        variants: entry.variants.map(variant => ({
+          ...variant,
+          contentful: false,
+          printful: true
+        }))
+      };
+    }
+  });
+  response.send(Object.values(entries));
 });
 
 app.post("/api/entries", async (request, response) => {
