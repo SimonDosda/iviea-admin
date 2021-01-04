@@ -4,14 +4,13 @@ const app = express();
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-app.use('/api', protectedRoute);
+app.use("/api", protectedRoute);
 
 // http://expressjs.com/en/starter/static-files.html
 app.use(express.static("public"));
 
-const contentful = require('./utils/contentful');
-const printful = require('./utils/printful');
-
+const contentful = require("./utils/contentful");
+const printful = require("./utils/printful");
 
 // http://expressjs.com/en/starter/basic-routing.html
 app.get("/", (request, response) => {
@@ -22,14 +21,16 @@ app.get("/", (request, response) => {
 app.get("/api/products", async (request, response) => {
   const contentful = await contentful.getProductEntries();
   const prinful = await printful.getVariants();
-  response.send({contentful, prinful});
-})
+  response.send({ contentful, prinful });
+});
 
 app.post("/api/entries", async (request, response) => {
-  const entries = await contentful.createEntry('product', {name: {en: 'test'}, price: {en: '12'}});
+  const entries = await contentful.createEntry("product", {
+    name: { en: "test" },
+    price: { en: "12" }
+  });
   response.send(entries);
-})
-
+});
 
 // listen for requests :)
 var listener = app.listen(process.env.PORT, () => {
@@ -40,6 +41,6 @@ function protectedRoute(request, response, next) {
   if (request.headers.authorization === process.env.PASSWORD) {
     next();
   } else {
-    response.status(400).send('Unauthorized');
+    response.status(400).send("Unauthorized");
   }
 }
