@@ -3,7 +3,10 @@ const app = new Vue({
   data: {
     title: 'Syncful',
     token: null,
-    entries: []
+    entries: [],
+    fields: [
+      {name: "name", value: (variant) => variant.product}
+    ]
   },
   methods: {
     getProducts: function () {

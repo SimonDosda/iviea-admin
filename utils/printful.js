@@ -49,11 +49,11 @@ async function getVariantShippingRates(variantId, recipient, currency) {
       "Content-Type": "application/json",
       Authorization: `Basic ${process.env.PRINTFUL_API_KEY}`
     },
-    body: {
+    body: JSON.stringify({
       recipient,
       items: [{ quantity: 1, variant_id: variantId }],
       currency
-    }
+    })
   });
   const { result } = await res.json();
   return result;
@@ -77,14 +77,14 @@ async function getAllProductInfo() {
     for (let j = 0; j < productInfo.sync_variants.length; j++) {
       const { variant_id } = productInfo.sync_variants[j];
       productInfo.sync_variants[j].info = await getVariantInfo(variant_id);
-      productInfo.sync_variants[j].shippingRatesList = [];
+      productInfo.sync_variants[j].shippingRates = [];
       for (let k = 0; k < recipients.length; k++) {
         const shippingRates = await getVariantShippingRates(
           variant_id,
           recipients[k],
           "EUR"
         );
-        productInfo.sync_variants[j].shippingRatesList.push({
+        productInfo.sync_variants[j].shippingRates.push({
           country: recipients[k].country_code,
           shippingRates
         });
@@ -118,7 +118,12 @@ function parseVariant(variant) {
   return {
     name: { en: variant.name.split(" - ")[1] },
     sku: { en: variant.external_id },
+    product_price: variant.info.price,
     price: { en: variant.retail_price },
+    shippingRates: [variant.shippingRates.map((shippingRates) => ({
+      country: shippingRates.country,
+      rate: shippingRates.shippingRates[0].rate
+    }))],
     images: { en: variant.files.map(file => file.preview_url) }
   };
 }
