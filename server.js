@@ -48,7 +48,7 @@ app.get("/api/products", async (request, response) => {
       };
     }
   });
-  response.send(Object.values(entries));
+  response.send({entries: Object.values(entries), contentfulEntries, printfulEntries});
 });
 
 app.post("/api/entries", async (request, response) => {
