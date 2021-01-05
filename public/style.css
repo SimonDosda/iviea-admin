@@ -17,7 +17,11 @@ main {
   font-weight: bold;
 }
 
-.product {}
+.product {
+  display: flex;
+  height: 75px;
+  align-items: center;
+}
 
 .variant {
   display: grid;

@@ -39,9 +39,9 @@
         </button>
 
         <div v-for="entry in entries" class="product">
-          <div class="variant">
+          <div class="product">
             <div class="image">
-              <img :src="variant.images.en[0]" />
+              <img :src="entry.product.images.en[0]" />
             </div>
             <h2>
               {{ entry.product.name.en}}
