@@ -34,16 +34,16 @@
           <input type="password" v-model="token" id="password" />
         </label>
 
-        <div>  
-        <button v-on:click="getProducts" class="btn">
-          Get Products
-        </button>
+        <div class="buttons">
+          <button v-on:click="getProducts" class="btn">
+            Get Products
+          </button>
           <button v-on:click="getEntries" class="btn">
-          Get Entries
-        </button>
+            Get Entries
+          </button>
           <button v-on:click="updateEntries" class="btn">
-          Update Entries
-        </button>
+            Update Entries
+          </button>
         </div>
 
         <div v-for="entry in entries" class="product">

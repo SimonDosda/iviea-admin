@@ -6,6 +6,10 @@ main {
   align-items: baseline;
 }
 
+.buttons {
+  display: flex;
+}
+
 .btn {
   padding: 5px 10px;
   background: white;
