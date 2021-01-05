@@ -19,6 +19,29 @@ const app = new Vue({
           this.entries = entries;
         });
     },
+    getEntries: function() {
+      fetch("/api/entries", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: this.token
+        }
+      })
+        .then(res => res.json())
+        .then(({ entries }) => {
+          this.entries = entries;
+        });
+    },
+    updateEntries: function() {
+      fetch("/api/entries", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: this.token,
+          body: {entries: this.entries}
+        }
+      });
+    },
     addEntry: function() {
       fetch("/contentful-api/entries", {
         method: "POST",

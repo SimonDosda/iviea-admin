@@ -8,9 +8,9 @@
   },
   "dependencies": {
     "express": "^4.17.1",
-    "sqlite3": "^4.1.1",
     "contentful-management": "^7.5.0",
-    "node-fetch": "^2.6.1"
+    "node-fetch": "^2.6.1",
+    "lowdb": "^1.0.0"
   },
   "engines": {
     "node": "12.x"

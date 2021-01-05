@@ -56,20 +56,14 @@ app.get("/api/products", async (request, response) => {
   response.send({entries: Object.values(entries), products});
 });
 
-app.put("/api/products", async (request, response) => {
-  request.body.entries.forEach(entry =>
-    db.run(
-      `INSERT INTO Product (gameId, word, color, position) VALUES (?, ?, ?, ?)`,
-      [gameId, shuffledWords[index], color, index],
-      err => {
-        if (err) {
-          console.log(err);
-          response.send({ err });
-        }
-      }
-    )
-  );
-  response.send({entries: Object.values(entries), products});
+app.get("/api/entries", async (request, response) => {
+  const entries = db.get('entries');
+  response.send({entries});
+});
+
+app.put("/api/entries", async (request, response) => {
+  db.update('entries', () => request.body.entries).write();
+  response.send('ok');
 });
 
 app.post("/api/entries", async (request, response) => {
