@@ -6,13 +6,20 @@ const app = new Vue({
     entries: []
   },
   methods: {
-    getProducts: function() {
-      fetch("/api/products", {
-        method: "GET",
+    fetchApi: function (route, params) {
+      return fetch("/api/" + route, {
+        ...params,
         headers: {
           "Content-Type": "application/json",
           Authorization: this.token
         }
+      })
+        .then(res => res.json())
+        .catch(err => console.log(err))
+    },
+    getProducts: function() {
+      this.fetchApi("products", {
+        method: "GET"
       })
         .then(res => res.json())
         .then(({ entries }) => {
@@ -35,15 +42,15 @@ const app = new Vue({
     updateEntries: function() {
       fetch("/api/entries", {
         method: "PUT",
+        body: JSON.stringify({entries: this.entries}),
         headers: {
           "Content-Type": "application/json",
           Authorization: this.token,
-          body: JSON.stringify({entries: this.entries})
         }
       });
     },
     addEntry: function() {
-      fetch("/contentful-api/entries", {
+      fetch("/api/entries", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

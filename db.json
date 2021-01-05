@@ -1,3 +1,292 @@
 {
-  "entries": []
+  "entries": [
+    {
+      "product": {
+        "name": {
+          "en": "Afloat Square"
+        },
+        "sku": {
+          "en": "5fe602ea5e2c35"
+        },
+        "images": {
+          "en": [
+            "https://files.cdn.printful.com/printfile-preview/272428911/5d3536cd077948f1bbb47a31473d5bff_preview.png",
+            "https://files.cdn.printful.com/files/e8a/e8a0721c706cdcb50a80a9ab7d97bc6e_preview.png"
+          ]
+        },
+        "contentful": false,
+        "printful": true
+      },
+      "variants": [
+        {
+          "name": {
+            "en": "10×10"
+          },
+          "sku": {
+            "en": "5fe602ea5e2d26"
+          },
+          "productPrice": 6.5,
+          "price": {
+            "en": 15
+          },
+          "shippingRates": [
+            {
+              "country": "FR",
+              "rate": 5.1
+            },
+            {
+              "country": "GB",
+              "rate": 5.1
+            },
+            {
+              "country": "US",
+              "rate": 4.5
+            },
+            {
+              "country": "CA",
+              "rate": 5.45
+            }
+          ],
+          "images": {
+            "en": []
+          },
+          "contentful": false,
+          "printful": true
+        },
+        {
+          "name": {
+            "en": "12×12"
+          },
+          "sku": {
+            "en": "5fe602ea5e2da8"
+          },
+          "productPrice": 7.25,
+          "price": {
+            "en": 18
+          },
+          "shippingRates": [
+            {
+              "country": "FR",
+              "rate": 5.1
+            },
+            {
+              "country": "GB",
+              "rate": 5.1
+            },
+            {
+              "country": "US",
+              "rate": 4.5
+            },
+            {
+              "country": "CA",
+              "rate": 5.45
+            }
+          ],
+          "images": {
+            "en": []
+          },
+          "contentful": false,
+          "printful": true
+        },
+        {
+          "name": {
+            "en": "14×14"
+          },
+          "sku": {
+            "en": "5fe602ea5e2e05"
+          },
+          "productPrice": 8.75,
+          "price": {
+            "en": 21
+          },
+          "shippingRates": [
+            {
+              "country": "FR",
+              "rate": 5.1
+            },
+            {
+              "country": "GB",
+              "rate": 5.1
+            },
+            {
+              "country": "US",
+              "rate": 4.5
+            },
+            {
+              "country": "CA",
+              "rate": 5.45
+            }
+          ],
+          "images": {
+            "en": []
+          },
+          "contentful": false,
+          "printful": true
+        },
+        {
+          "name": {
+            "en": "16×16"
+          },
+          "sku": {
+            "en": "5fe602ea5e2e79"
+          },
+          "productPrice": 9.25,
+          "price": {
+            "en": 24
+          },
+          "shippingRates": [
+            {
+              "country": "FR",
+              "rate": 5.1
+            },
+            {
+              "country": "GB",
+              "rate": 5.1
+            },
+            {
+              "country": "US",
+              "rate": 4.5
+            },
+            {
+              "country": "CA",
+              "rate": 5.45
+            }
+          ],
+          "images": {
+            "en": []
+          },
+          "contentful": false,
+          "printful": true
+        },
+        {
+          "name": {
+            "en": "18×18"
+          },
+          "sku": {
+            "en": "5fe602ea5e2ed4"
+          },
+          "productPrice": 10.95,
+          "price": {
+            "en": 27
+          },
+          "shippingRates": [
+            {
+              "country": "FR",
+              "rate": 5.1
+            },
+            {
+              "country": "GB",
+              "rate": 5.1
+            },
+            {
+              "country": "US",
+              "rate": 4.5
+            },
+            {
+              "country": "CA",
+              "rate": 5.45
+            }
+          ],
+          "images": {
+            "en": []
+          },
+          "contentful": false,
+          "printful": true
+        }
+      ]
+    },
+    {
+      "product": {
+        "name": {
+          "en": "Afloat"
+        },
+        "sku": {
+          "en": "5fe6026b2dd098"
+        },
+        "images": {
+          "en": []
+        },
+        "contentful": false,
+        "printful": true
+      },
+      "variants": [
+        {
+          "name": {
+            "en": "12×18"
+          },
+          "sku": {
+            "en": "5fe6026b2dd197"
+          },
+          "productPrice": 9.95,
+          "price": {
+            "en": 20
+          },
+          "shippingRates": [
+            {
+              "country": "FR",
+              "rate": 5.1
+            },
+            {
+              "country": "GB",
+              "rate": 5.1
+            },
+            {
+              "country": "US",
+              "rate": 4.5
+            },
+            {
+              "country": "CA",
+              "rate": 5.45
+            }
+          ],
+          "images": {
+            "en": [
+              "https://files.cdn.printful.com/printfile-preview/272428668/ae60e542049c23410290b984a0194b73_preview.png",
+              "https://files.cdn.printful.com/files/aed/aed6dfa2f247875f18ba27a37c12d065_preview.png"
+            ]
+          },
+          "contentful": false,
+          "printful": true
+        },
+        {
+          "name": {
+            "en": "24×36"
+          },
+          "sku": {
+            "en": "5fe6026b2dd216"
+          },
+          "productPrice": 15.95,
+          "price": {
+            "en": 35
+          },
+          "shippingRates": [
+            {
+              "country": "FR",
+              "rate": 5.55
+            },
+            {
+              "country": "GB",
+              "rate": 5.55
+            },
+            {
+              "country": "US",
+              "rate": 5.4
+            },
+            {
+              "country": "CA",
+              "rate": 6.35
+            }
+          ],
+          "images": {
+            "en": [
+              "https://files.cdn.printful.com/printfile-preview/272428668/ae60e542049c23410290b984a0194b73_preview.png",
+              "https://files.cdn.printful.com/files/97e/97e957a08c613a39e88545453c8540b9_preview.png"
+            ]
+          },
+          "contentful": false,
+          "printful": true
+        }
+      ]
+    }
+  ]
 }
