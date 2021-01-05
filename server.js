@@ -62,7 +62,6 @@ app.get("/api/entries", async (request, response) => {
 });
 
 app.put("/api/entries", async (request, response) => {
-  console.log(request.body);
   db.set('entries', request.body.entries).write();
   response.send('ok');
 });

@@ -38,7 +38,7 @@ const app = new Vue({
         headers: {
           "Content-Type": "application/json",
           Authorization: this.token,
-          body: {entries: this.entries}
+          body: JSON.stringify({entries: this.entries})
         }
       });
     },
