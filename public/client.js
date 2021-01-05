@@ -1,20 +1,10 @@
+
 const app = new Vue({
   el: "#app",
   data: {
     title: "Syncful",
     token: null,
-    entries: [],
-    fields: [
-      { name: "name", value: variant => variant.name.en },
-      { name: "product price", value: variant => variant.productPrice },
-      { name: "shipping", value: variant => variant.shippingRates[0].rate },
-      {
-        name: "all inc. price",
-        value: variant =>
-          Math.round((variant.productPrice + variant.shippingRates[0].rate) * 12) / 10
-      },
-      { name: "retail price", value: variant => variant.price.en }
-    ]
+    entries: []
   },
   methods: {
     getProducts: function() {
@@ -38,6 +28,20 @@ const app = new Vue({
           Authorization: this.token
         }
       }).then(res => res.json());
-    }
+    },
+    getFields: function(variant) {
+      return [
+  { name: "name", value: variant.name.en },
+  { name: "product price", value: variant.productPrice },
+  ...variant.shippingRates.map(shipping => (
+    {name: `shipping rate {shipping.country}`, value: shipping.rate}
+  )),
+  {
+    name: "total price w/ tax",
+    value: variant => variant.productPrice + Math.max(...variant.shippingRates.map(({rate})=> rate))
+  },
+  { name: "retail price all inc.", value: variant => variant.price.en }
+];
+  }
   }
 });
