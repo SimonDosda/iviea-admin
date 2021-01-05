@@ -1,4 +1,3 @@
-
 const app = new Vue({
   el: "#app",
   data: {
@@ -31,17 +30,20 @@ const app = new Vue({
     },
     getFields: function(variant) {
       return [
-  { name: "name", value: variant.name.en },
-  { name: "product price", value: variant.productPrice },
-  ...variant.shippingRates.map(shipping => (
-    {name: `shipping rate {shipping.country}`, value: shipping.rate}
-  )),
-  {
-    name: "total price w/ tax",
-    value: variant => variant.productPrice + Math.max(...variant.shippingRates.map(({rate})=> rate))
-  },
-  { name: "retail price all inc.", value: variant => variant.price.en }
-];
-  }
+        { name: "name", value: variant.name.en },
+        { name: "product price", value: variant.productPrice },
+        ...variant.shippingRates.map(shipping => ({
+          name: 'shipping rate ' + shipping.country,
+          value: shipping.rate
+        })),
+        {
+          name: "total price w/ tax",
+          value: 
+            variant.productPrice +
+            Math.max(...variant.shippingRates.map(({ rate }) => rate))
+        },
+        { name: "retail price all inc.", value: variant.price.en }
+      ];
+    }
   }
 });

@@ -101,10 +101,16 @@ async function getProductEntries() {
 }
 
 function productToEntry(product) {
-  return {
+  const entry = {
     product: parseProduct(product.sync_product),
     variants: product.sync_variants.map(parseVariant)
   };
+  const images = entry.variants[0].images.en;
+  if (entry.variants.all( variant => variant.images.en === images)) {
+      entry.product.images.en = images;
+      entry.variants.forEach(variant => variant.images.en = [])
+      }
+return entry;
 }
 
 function parseProduct(product) {
