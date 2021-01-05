@@ -9,6 +9,10 @@ app.use("/api", protectedRoute);
 // http://expressjs.com/en/starter/static-files.html
 app.use(express.static("public"));
 
+// db
+const db = require("./db")
+
+// helpers
 const contentful = require("./utils/contentful");
 const printful = require("./utils/printful");
 
@@ -53,9 +57,9 @@ app.get("/api/products", async (request, response) => {
 });
 
 app.put("/api/products", async (request, response) => {
-  shuffledColors.forEach((color, index) =>
+  request.body.entries.forEach(entry =>
     db.run(
-      `INSERT INTO Card (gameId, word, color, position) VALUES (?, ?, ?, ?)`,
+      `INSERT INTO Product (gameId, word, color, position) VALUES (?, ?, ?, ?)`,
       [gameId, shuffledWords[index], color, index],
       err => {
         if (err) {

@@ -32,3 +32,19 @@ function initDatabase() {
     );
   });
 }
+
+function updateProducts(entries, locale="en") {
+  entries.forEach(entry => {
+    db.run(
+      "INSERT INTO Product (locale, name, sku) VALUES (?, ?, ?)",
+      [locale, entry.product.name[locale], entry.product.sku[locale]],
+      err => {
+        if (err) {
+          console.log(err);
+        }
+      }
+    );
+  })
+}
+
+module.exports = {db}
