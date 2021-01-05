@@ -39,19 +39,20 @@
         </button>
 
         <div v-for="entry in entries" class="product">
-          <h2>
-            {{ entry.product.name.en}}
-          </h2>
           <div class="variant">
-            <div></div>
+            <div class="image">
+              <img :src="variant.images.en[0]" />
+            </div>
+            <h2>
+              {{ entry.product.name.en}}
+            </h2>
+          </div>
+          <div class="variant">
             <div v-for="field in getFields(entry.variants[0])">
               {{field.name}}
             </div>
           </div>
           <div v-for="variant in entry.variants" class="variant">
-            <div class="image">
-              <img :src="variant.images.en[0]" />
-            </div>
             <div v-for="field in getFields(variant)">
               {{field.value}}
             </div>

@@ -106,17 +106,18 @@ function productToEntry(product) {
     variants: product.sync_variants.map(parseVariant)
   };
   const images = entry.variants[0].images.en;
-  if (entry.variants.all( variant => variant.images.en === images)) {
-      entry.product.images.en = images;
-      entry.variants.forEach(variant => variant.images.en = [])
-      }
-return entry;
+  if (entry.variants.every(variant => JSON.stringify(variant.images.en) === JSON.stringify(images))) {
+    entry.product.images.en = images;
+    entry.variants.forEach(variant => (variant.images.en = []));
+  }
+  return entry;
 }
 
 function parseProduct(product) {
   return {
     name: { en: product.name },
-    sku: { en: product.external_id }
+    sku: { en: product.external_id },
+    images: {en: []}
   };
 }
 
