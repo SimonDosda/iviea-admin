@@ -52,6 +52,22 @@ app.get("/api/products", async (request, response) => {
   response.send({entries: Object.values(entries), products});
 });
 
+app.put("/api/products", async (request, response) => {
+  shuffledColors.forEach((color, index) =>
+    db.run(
+      `INSERT INTO Card (gameId, word, color, position) VALUES (?, ?, ?, ?)`,
+      [gameId, shuffledWords[index], color, index],
+      err => {
+        if (err) {
+          console.log(err);
+          response.send({ err });
+        }
+      }
+    )
+  );
+  response.send({entries: Object.values(entries), products});
+});
+
 app.post("/api/entries", async (request, response) => {
   const entries = await contentful.createEntry("product", {
     name: { en: "test" },

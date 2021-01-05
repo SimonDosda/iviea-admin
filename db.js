@@ -19,7 +19,15 @@ function initDatabase() {
       err => console.log(err)
     );
     await db.run(
-      "CREATE TABLE Variant (id INTEGER PRIMARY KEY AUTOINCREMENT, product_id INTEGER, name TEXT);",
+      "CREATE TABLE Variant (id INTEGER PRIMARY KEY AUTOINCREMENT, product_id INTEGER, name TEXT, sku TEXT, product_price FLOAT, retail_price FLOAT);",
+      err => console.log(err)
+    );
+    await db.run(
+      "CREATE TABLE VariantImage (id INTEGER PRIMARY KEY AUTOINCREMENT, variant_id INTEGER, src TEXT);",
+      err => console.log(err)
+    );
+    await db.run(
+      "CREATE TABLE ShippingRates (id INTEGER PRIMARY KEY AUTOINCREMENT, variant_id INTEGER, country TEXT, rate FLOAT);",
       err => console.log(err)
     );
   });
