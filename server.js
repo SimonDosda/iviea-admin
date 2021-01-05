@@ -57,12 +57,13 @@ app.get("/api/products", async (request, response) => {
 });
 
 app.get("/api/entries", async (request, response) => {
-  const entries = db.get('entries');
+  const entries = db.get('entries').value();
   response.send({entries});
 });
 
 app.put("/api/entries", async (request, response) => {
-  db.update('entries', () => request.body.entries).write();
+  console.log(request.body);
+  db.set('entries', request.body.entries).write();
   response.send('ok');
 });
 
