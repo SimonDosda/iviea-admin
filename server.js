@@ -83,6 +83,6 @@ function protectedRoute(request, response, next) {
   if (request.headers.authorization === process.env.PASSWORD) {
     next();
   } else {
-    response.status(400).send("Unauthorized");
+    response.status(400).send({error: "Unauthorized"});
   }
 }

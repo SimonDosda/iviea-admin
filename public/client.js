@@ -3,10 +3,11 @@ const app = new Vue({
   data: {
     title: "Syncful",
     token: null,
-    entries: []
+    entries: [],
+    error: null
   },
   methods: {
-    fetchApi: function (route, params) {
+    fetchApi: function(route, params) {
       return fetch("/api/" + route, {
         ...params,
         headers: {
@@ -14,39 +15,26 @@ const app = new Vue({
           Authorization: this.token
         }
       })
-        .then(res => res.json())
-        .catch(err => console.log(err))
+        .then(res => {
+        if (res.status == 400) {
+          this.error = "Unauthorized";
+        }
+          res.json();
     },
     getProducts: function() {
-      this.fetchApi("products", {
-        method: "GET"
-      })
-        .then(res => res.json())
-        .then(({ entries }) => {
-          this.entries = entries;
-        });
+      this.fetchApi("products", { method: "GET" }).then(({ entries }) => {
+        this.entries = entries;
+      });
     },
     getEntries: function() {
-      fetch("/api/entries", {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: this.token
-        }
-      })
-        .then(res => res.json())
-        .then(({ entries }) => {
-          this.entries = entries;
-        });
+      this.fetchApi("entries", { method: "GET" }).then(({ entries }) => {
+        this.entries = entries;
+      });
     },
     updateEntries: function() {
-      fetch("/api/entries", {
+      this.fetchApi("entries", {
         method: "PUT",
-        body: JSON.stringify({entries: this.entries}),
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: this.token,
-        }
+        body: JSON.stringify({ entries: this.entries })
       });
     },
     addEntry: function() {
@@ -63,12 +51,12 @@ const app = new Vue({
         { name: "name", value: variant.name.en },
         { name: "product price", value: variant.productPrice },
         ...variant.shippingRates.map(shipping => ({
-          name: 'shipping rate ' + shipping.country,
+          name: "shipping rate " + shipping.country,
           value: shipping.rate
         })),
         {
           name: "total price w/ tax",
-          value: 
+          value:
             variant.productPrice +
             Math.max(...variant.shippingRates.map(({ rate }) => rate))
         },
