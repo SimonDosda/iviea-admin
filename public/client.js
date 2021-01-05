@@ -8,6 +8,7 @@ const app = new Vue({
   },
   methods: {
     fetchApi: function(route, params) {
+      this.error = null;
       return fetch("/api/" + route, {
         ...params,
         headers: {
@@ -18,8 +19,10 @@ const app = new Vue({
         .then(res => {
         if (res.status == 400) {
           this.error = "Unauthorized";
+          return {}
         }
-          res.json();
+        return res.json();
+      })
     },
     getProducts: function() {
       this.fetchApi("products", { method: "GET" }).then(({ entries }) => {

@@ -10,6 +10,11 @@ main {
   display: flex;
 }
 
+.error {
+  color: darkred;
+  text-transform: uppercase;
+}
+
 .btn {
   padding: 5px 10px;
   background: white;
