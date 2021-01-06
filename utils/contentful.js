@@ -13,9 +13,7 @@ const client = contentful.createClient(
 );
 
 async function getEntries(contentTypes) {
-  const entries = await client.entry.getMany({
-    query: { skip: 0, limit: 100 }
-  });
+  const entries = await client.entry.getMany({});
   return entries.items.filter(item =>
     contentTypes.includes(item.sys.contentType.sys.id)
   );
@@ -47,6 +45,12 @@ async function createEntry(contentTypeId, fields) {
 }
 
 async function updateEntries(entries) {
+  const currentEntries = await client.entry.getMany({});
+  
+  currentEntries.forEach(entry => {
+    
+  })
+  
   entries.forEach(async ({ product, variants }) => {
     const entry = await createEntry("product", {
       ...product,

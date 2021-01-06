@@ -77,8 +77,8 @@ app.put("/api/entries", async (request, response) => {
 });
 
 app.post("/api/entries", async (request, response) => {
-  const entries = await contentful.updateEntries(request.body.entries);
-  response.send(entries);
+  await contentful.updateEntries(request.body.entries);
+  response.send({response: "ok"});
 });
 
 // listen for requests :)
