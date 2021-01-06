@@ -47,13 +47,14 @@ async function createEntry(contentTypeId, fields) {
 }
 
 async function updateEntries(entries) {
+  const seenProducts = [];
+  const seenVariants = [];
+  
   const currentProducts = await client.entry.getMany({
     query: {
       "sys.contentType.sys.id": "product"
     }
   });
-  const seenProducts = [];
-  const seenVariants = [];
 
   currentProducts.items.forEach(async product => {
     const newEntry = entries.find(

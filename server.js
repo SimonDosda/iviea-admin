@@ -23,9 +23,9 @@ app.get("/", (request, response) => {
 
 // Fetch data
 app.get("/api/products", async (request, response) => {
-  const rawEntries = await contentful.getEntries(['product', 'variant']);
+  const rawEntries = await contentful.getEntries(["product", "variant"]);
   const contentfulEntries = await contentful.getProductEntries(rawEntries);
-  
+
   const products = await printful.getAllProductInfo();
   const printfulEntries = products.map(printful.productToEntry);
   const entries = contentfulEntries.reduce((res, entry) => {
@@ -51,7 +51,7 @@ app.get("/api/products", async (request, response) => {
     } else {
       entries[entry.product.sku.en] = {
         product: {
-          ...entry.product,
+          ...entry.product
           // contentful: false,
           // printful: true
         },
@@ -73,12 +73,12 @@ app.get("/api/entries", async (request, response) => {
 
 app.put("/api/entries", async (request, response) => {
   db.set("entries", request.body.entries).write();
-  response.send({response: "ok"});
+  response.send({ response: "ok" });
 });
 
 app.post("/api/entries", async (request, response) => {
   await contentful.updateEntries(request.body.entries);
-  response.send({response: "ok"});
+  response.send({ response: "ok" });
 });
 
 // listen for requests :)
