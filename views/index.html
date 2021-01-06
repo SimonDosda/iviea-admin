@@ -49,7 +49,35 @@
             Add Entry
           </button>
         </div>
-
+        
+        <div v-for="entry in entries" class="products">
+          <div class="product">
+            <div class="image">
+              <img :src="entry.product.images.en[0]" />
+            </div>
+            <h2>
+              {{ entry.product.name.en}}
+            </h2>
+          </div>
+          <table>
+            <thead>
+              <tr>
+                <th v-for="field in getFields(entry.variants[0])">
+              {{field.name}}
+            </div>
+              </tr>
+            </thead>
+          </table>
+          <div class="variant">
+            
+          </div>
+          <div v-for="variant in entry.variants" class="variant">
+            <div v-for="field in getFields(variant)">
+              {{field.value}}
+            </div>
+          </div>
+        </div>
+        
         <div v-for="entry in entries" class="products">
           <div class="product">
             <div class="image">

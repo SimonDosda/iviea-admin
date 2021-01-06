@@ -15,14 +15,13 @@ const app = new Vue({
           "Content-Type": "application/json",
           Authorization: this.token
         }
-      })
-        .then(res => {
+      }).then(res => {
         if (res.status == 400) {
           this.error = "Unauthorized";
-          return {}
+          return {};
         }
         return res.json();
-      })
+      });
     },
     getProducts: function() {
       this.fetchApi("products", { method: "GET" }).then(({ entries }) => {
@@ -60,8 +59,11 @@ const app = new Vue({
         {
           name: "total price w/ tax",
           value:
-            variant.productPrice +
-            Math.max(...variant.shippingRates.map(({ rate }) => rate))
+            Math.round(
+              (variant.productPrice +
+                Math.max(...variant.shippingRates.map(({ rate }) => rate))) *
+                100
+            ) / 100
         },
         { name: "retail price all inc.", value: variant.price.en }
       ];
