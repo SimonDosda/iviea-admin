@@ -10,7 +10,7 @@ app.use("/api", protectedRoute);
 app.use(express.static("public"));
 
 // db
-const db = require("./db")
+const db = require("./db");
 
 // helpers
 const contentful = require("./utils/contentful");
@@ -30,9 +30,13 @@ app.get("/api/products", async (request, response) => {
     return {
       ...res,
       [entry.product.sku.en]: {
-        product: { ...entry.product, contentful: true, printful: false },
+        product: {
+          ...entry.product
+          // contentful: true,
+          // printful: false
+        },
         variants: entry.variants.map(variant => ({
-          ...variant,
+          ...variant
           // contentful: true,
           // printful: false
         }))
@@ -41,29 +45,33 @@ app.get("/api/products", async (request, response) => {
   }, {});
   printfulEntries.forEach(entry => {
     if (entry.product.sku.en in entries) {
-      entries[entry.product.sku.en].printful = true;
+      // entries[entry.product.sku.en].printful = true;
     } else {
       entries[entry.product.sku.en] = {
-        product: { ...entry.product, contentful: false, printful: true },
+        product: {
+          ...entry.product,
+          // contentful: false,
+          // printful: true
+        },
         variants: entry.variants.map(variant => ({
-          ...variant,
+          ...variant
           // contentful: false,
           // printful: true
         }))
       };
     }
   });
-  response.send({entries: Object.values(entries), products});
+  response.send({ entries: Object.values(entries), products, contentfulEntries });
 });
 
 app.get("/api/entries", async (request, response) => {
-  const entries = db.get('entries').value();
-  response.send({entries});
+  const entries = db.get("entries").value();
+  response.send({ entries });
 });
 
 app.put("/api/entries", async (request, response) => {
-  db.set('entries', request.body.entries).write();
-  response.send('ok');
+  db.set("entries", request.body.entries).write();
+  response.send("ok");
 });
 
 app.post("/api/entries", async (request, response) => {
@@ -80,6 +88,6 @@ function protectedRoute(request, response, next) {
   if (request.headers.authorization === process.env.PASSWORD) {
     next();
   } else {
-    response.status(400).send({error: "Unauthorized"});
+    response.status(400).send({ error: "Unauthorized" });
   }
 }

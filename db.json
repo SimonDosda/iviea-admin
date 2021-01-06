@@ -13,9 +13,7 @@
             "https://files.cdn.printful.com/printfile-preview/272428911/5d3536cd077948f1bbb47a31473d5bff_preview.png",
             "https://files.cdn.printful.com/files/e8a/e8a0721c706cdcb50a80a9ab7d97bc6e_preview.png"
           ]
-        },
-        "contentful": false,
-        "printful": true
+        }
       },
       "variants": [
         {
@@ -218,9 +216,7 @@
             "https://files.cdn.printful.com/printfile-preview/272428668/ae60e542049c23410290b984a0194b73_preview.png",
             "https://files.cdn.printful.com/files/aed/aed6dfa2f247875f18ba27a37c12d065_preview.png"
           ]
-        },
-        "contentful": false,
-        "printful": true
+        }
       },
       "variants": [
         {
