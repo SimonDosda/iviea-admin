@@ -106,7 +106,7 @@ function productToEntry(product) {
     variants: product.sync_variants.map(parseVariant)
   };
   const images = entry.variants[0].images.en;
-  if (entry.variants.every(variant => JSON.stringify(variant.images.en) === JSON.stringify(images))) {
+  if (entry.variants.every(variant => JSON.stringify(variant.images.en[0]) === JSON.stringify(images[0]))) {
     entry.product.images.en = images;
     entry.variants.forEach(variant => (variant.images.en = []));
   }

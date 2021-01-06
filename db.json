@@ -204,7 +204,10 @@
           "en": "5fe6026b2dd098"
         },
         "images": {
-          "en": []
+          "en": [
+            "https://files.cdn.printful.com/printfile-preview/272428668/ae60e542049c23410290b984a0194b73_preview.png",
+            "https://files.cdn.printful.com/files/aed/aed6dfa2f247875f18ba27a37c12d065_preview.png"
+          ]
         },
         "contentful": false,
         "printful": true
@@ -240,10 +243,7 @@
             }
           ],
           "images": {
-            "en": [
-              "https://files.cdn.printful.com/printfile-preview/272428668/ae60e542049c23410290b984a0194b73_preview.png",
-              "https://files.cdn.printful.com/files/aed/aed6dfa2f247875f18ba27a37c12d065_preview.png"
-            ]
+            "en": []
           },
           "contentful": false,
           "printful": true
@@ -278,10 +278,7 @@
             }
           ],
           "images": {
-            "en": [
-              "https://files.cdn.printful.com/printfile-preview/272428668/ae60e542049c23410290b984a0194b73_preview.png",
-              "https://files.cdn.printful.com/files/97e/97e957a08c613a39e88545453c8540b9_preview.png"
-            ]
+            "en": []
           },
           "contentful": false,
           "printful": true

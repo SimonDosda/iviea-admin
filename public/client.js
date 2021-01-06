@@ -49,26 +49,26 @@ const app = new Vue({
       }).then(res => res.json());
     },
     getFields: function(variant) {
+      const minShippingRate = Math.max(...variant.shippingRates.map(({ rate }) => rate));
+      const maxShippingRate = Math.max(...variant.shippingRates.map(({ rate }) => rate));
       return [
         { name: "name", value: variant.name.en },
         { name: "product price", value: variant.productPrice },
-        ...variant.shippingRates.map(shipping => ({
-          name: "shipping rate " + shipping.country,
-          value: shipping.rate
-        })),
+        { name: "min shipping rate", value: minShippingRate },
+        ,
         {
           name: "total price w/ tax",
           value:
             Math.round(
-              (variant.productPrice +
-                Math.max(...variant.shippingRates.map(({ rate }) => rate))) *
+              (variant.productPrice + maxShippingRate
+                 *
                 100
             ) / 100
         },
         { name: "retail price all inc.", value: variant.price.en },
         { name: "net retail price", value: Math.round(variant.price.en * 75) / 100 },
-        { name: "margin", value: Math.round((variant.price.en * 0.75 - variant.productPrice +
-                Math.max(...variant.shippingRates.map(({ rate }) => rate))) * 100) / 100  }
+        { name: "margin", value: Math.round((variant.price.en * 0.75 - variant.productPrice -
+                maxShippingRate * 100) / 100  }
       ];
     }
   }
