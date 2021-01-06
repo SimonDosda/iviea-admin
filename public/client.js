@@ -50,7 +50,7 @@ const app = new Vue({
     },
     getFields: function(variant) {
       const shippingRates = variant.shippingRates.map(({ rate }) => rate);
-      const minShippingRate = Math.max(...shippingRates);
+      const minShippingRate = Math.min(...shippingRates);
       const maxShippingRate = Math.max(...shippingRates);
       const totalPrice = variant.productPrice + maxShippingRate;
       const netRetailPrice = variant.price.en * 0.75;
