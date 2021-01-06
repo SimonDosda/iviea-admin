@@ -73,7 +73,7 @@ app.get("/api/entries", async (request, response) => {
 
 app.put("/api/entries", async (request, response) => {
   db.set("entries", request.body.entries).write();
-  response.send("ok");
+  response.send({response: "ok"});
 });
 
 app.post("/api/entries", async (request, response) => {
