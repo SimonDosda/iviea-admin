@@ -43,7 +43,7 @@ async function updateEntries(entries) {
   entries.forEach(async ({product, variants}) => {
     const entry = await createEntry("product", {...product, images: {en: []}});
     variants.forEach(variant => {
-      createEntry("variant", {...variant, images: {en: []}})
+      createEntry("variant", {...variant, images: {en: []}, product: {en: entry.sys.contentType}})
     })
   } )   
 }
