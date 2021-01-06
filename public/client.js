@@ -75,7 +75,7 @@ const app = new Vue({
         },
         {
           name: "advise",
-          value: formatPrice(totalPrice / (0.75 - 0.3))
+          value: Math.round(totalPrice / (0.75 - 0.3)) + " €"
         }
       ];
     }
