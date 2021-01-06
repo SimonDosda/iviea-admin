@@ -39,4 +39,10 @@ async function createEntry(contentTypeId, fields) {
   return await client.entry.create({ contentTypeId }, { fields });
 }
 
+async function updateEntries(entries) {
+  entries.forEach(({product, variants}) => {
+    await client.entry.create({ contentTypeId }, { fields });
+  } )   
+}
+
 module.exports = {getEntries, getProductEntries, createEntry};

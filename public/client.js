@@ -39,22 +39,20 @@ const app = new Vue({
         body: JSON.stringify({ entries: this.entries })
       });
     },
-    addEntry: function() {
-      fetch("/api/entries", {
+    addEntries: function() {
+      this.fetchApi("entries", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: this.token
-        }
-      }).then(res => res.json());
+        body: JSON.stringify({ entries: this.entries })
+      });
     },
     getFields: function(variant) {
       const shippingRates = variant.shippingRates.en.map(({ rate }) => rate);
       const minShippingRate = Math.min(...shippingRates);
       const maxShippingRate = Math.max(...shippingRates);
       const totalPrice = variant.productPrice.en + maxShippingRate;
-      const netRetailPrice = variant.price.en * 0.75;
-      const margin = netRetailPrice - totalPrice;
+      const retailPrice = variant.retailPrice.en;
+      const netRate = 0.75;
+      const margin = retailPrice * netRate - totalPrice;
 
       const round = value => Math.round(value * 100) / 100;
       const formatPrice = value => Math.round(value * 100) / 100 + " €";
@@ -62,20 +60,20 @@ const app = new Vue({
 
       return [
         { name: "name", value: variant.name.en },
-        { name: "product price", value: variant.productPrice },
+        { name: "product price", value: variant.productPrice.en },
         { name: "min shipping rate", value: formatPrice(minShippingRate) },
         { name: "maw shipping rate", value: formatPrice(maxShippingRate) },
         { name: "total price w/ tax", value: formatPrice(totalPrice) },
-        { name: "retail price all inc.", value: formatPrice(variant.price.en) },
-        { name: "net retail price", value: formatPrice(netRetailPrice) },
+        { name: "retail price all inc.", value: formatPrice(retailPrice) },
+        { name: "net retail price", value: formatPrice(retailPrice * netRate) },
         { name: "margin €", value: formatPrice(margin) },
         {
           name: "margin %",
-          value: formatPercent(margin / variant.price.en)
+          value: formatPercent(margin / retailPrice)
         },
         {
           name: "advise",
-          value: Math.round(totalPrice / (0.75 - 0.3)) + " €"
+          value: Math.round(totalPrice / (netRate - 0.3)) + " €"
         }
       ];
     }
