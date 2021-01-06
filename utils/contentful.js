@@ -14,8 +14,7 @@ async function getEntries(contentTypes) {
   return entries.items.filter(item => contentTypes.includes(item.sys.contentType.sys.id));
 } 
 
-async function getProductEntries() {
-  const entries = await getEntries(['product', 'variant']);
+async function getProductEntries(entries) {
   const entriesById = entries.reduce((res, entry) => {
     if (entry.sys.contentType.sys.id === 'product') {
       if (!(entry.sys.id in res)) {
@@ -23,12 +22,13 @@ async function getProductEntries() {
       } 
       res[entry.sys.id].product = entry.fields
     } else {
-      const productId = entry.fields.product.en.sys.id;
-      delete entry.fields.product;
+      const fields = {...entry.fields};
+      const productId = fields.product.en.sys.id;
+      delete fields.product;
       if (!(productId in res)) {
         res[productId] = {variants: []}
       } 
-      res[productId].variants.push(entry.fields);
+      res[productId].variants.push(fields);
     }
     return res;
   }, {})
