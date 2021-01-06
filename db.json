@@ -53,9 +53,7 @@
           },
           "images": {
             "en": []
-          },
-          "contentful": false,
-          "printful": true
+          }
         },
         {
           "name": {
@@ -92,9 +90,7 @@
           },
           "images": {
             "en": []
-          },
-          "contentful": false,
-          "printful": true
+          }
         },
         {
           "name": {
@@ -131,9 +127,7 @@
           },
           "images": {
             "en": []
-          },
-          "contentful": false,
-          "printful": true
+          }
         },
         {
           "name": {
@@ -170,9 +164,7 @@
           },
           "images": {
             "en": []
-          },
-          "contentful": false,
-          "printful": true
+          }
         },
         {
           "name": {
@@ -209,9 +201,7 @@
           },
           "images": {
             "en": []
-          },
-          "contentful": false,
-          "printful": true
+          }
         }
       ]
     },
@@ -268,9 +258,7 @@
           },
           "images": {
             "en": []
-          },
-          "contentful": false,
-          "printful": true
+          }
         },
         {
           "name": {
@@ -307,9 +295,7 @@
           },
           "images": {
             "en": []
-          },
-          "contentful": false,
-          "printful": true
+          }
         }
       ]
     }

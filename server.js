@@ -33,8 +33,8 @@ app.get("/api/products", async (request, response) => {
         product: { ...entry.product, contentful: true, printful: false },
         variants: entry.variants.map(variant => ({
           ...variant,
-          contentful: true,
-          printful: false
+          // contentful: true,
+          // printful: false
         }))
       }
     };
@@ -47,8 +47,8 @@ app.get("/api/products", async (request, response) => {
         product: { ...entry.product, contentful: false, printful: true },
         variants: entry.variants.map(variant => ({
           ...variant,
-          contentful: false,
-          printful: true
+          // contentful: false,
+          // printful: true
         }))
       };
     }
@@ -67,10 +67,7 @@ app.put("/api/entries", async (request, response) => {
 });
 
 app.post("/api/entries", async (request, response) => {
-  const entries = await contentful.createEntry("product", {
-    name: { en: "test" },
-    price: { en: "12" }
-  });
+  const entries = await contentful.updateEntries(request.body.entries);
   response.send(entries);
 });
 
