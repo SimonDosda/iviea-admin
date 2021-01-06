@@ -49,26 +49,27 @@ const app = new Vue({
       }).then(res => res.json());
     },
     getFields: function(variant) {
-      const minShippingRate = Math.max(...variant.shippingRates.map(({ rate }) => rate));
-      const maxShippingRate = Math.max(...variant.shippingRates.map(({ rate }) => rate));
+      const shippingRates = variant.shippingRates.map(({ rate }) => rate);
+      const minShippingRate = Math.max(...shippingRates);
+      const maxShippingRate = Math.max(...shippingRates);
+      const totalPrice = variant.productPrice + maxShippingRate;
+      const netRetailPrice = variant.price.en * 0.75;
+      const margin = netRetailPrice - totalPrice;
+
+      const round = value => Math.round(value * 100) / 100;
+      const formatPrice = value => Math.round(value * 100) / 100 + " €";
+      const formatPercent = value => Math.round(value * 1000) / 10 + " %";
+      
       return [
         { name: "name", value: variant.name.en },
         { name: "product price", value: variant.productPrice },
-        { name: "min shipping rate", value: minShippingRate },
-        ,
-        {
-          name: "total price w/ tax",
-          value:
-            Math.round(
-              (variant.productPrice + maxShippingRate
-                 *
-                100
-            ) / 100
-        },
-        { name: "retail price all inc.", value: variant.price.en },
-        { name: "net retail price", value: Math.round(variant.price.en * 75) / 100 },
-        { name: "margin", value: Math.round((variant.price.en * 0.75 - variant.productPrice -
-                maxShippingRate * 100) / 100  }
+        { name: "min shipping rate", value: formatPrice(minShippingRate) },
+        { name: "maw shipping rate", value: formatPrice(maxShippingRate) },
+        { name: "total price w/ tax", value: formatPrice(totalPrice) },
+        { name: "retail price all inc.", value: formatPrice(variant.price.en) },
+        { name: "net retail price", value: formatPrice(netRetailPrice) },
+        { name: "margin", value: formatPrice(margin) },
+        { name: "margin", value: formatPrice(margin) }
       ];
     }
   }
