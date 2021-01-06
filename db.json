@@ -25,28 +25,32 @@
           "sku": {
             "en": "5fe602ea5e2d26"
           },
-          "productPrice": 6.5,
-          "price": {
+          "productPrice": {
+            "en": 6.5
+          },
+          "retailPrice": {
             "en": 15
           },
-          "shippingRates": [
-            {
-              "country": "FR",
-              "rate": 5.1
-            },
-            {
-              "country": "GB",
-              "rate": 5.1
-            },
-            {
-              "country": "US",
-              "rate": 4.5
-            },
-            {
-              "country": "CA",
-              "rate": 5.45
-            }
-          ],
+          "shippingRates": {
+            "en": [
+              {
+                "country": "FR",
+                "rate": 5.1
+              },
+              {
+                "country": "GB",
+                "rate": 5.1
+              },
+              {
+                "country": "US",
+                "rate": 4.5
+              },
+              {
+                "country": "CA",
+                "rate": 5.45
+              }
+            ]
+          },
           "images": {
             "en": []
           },
@@ -60,28 +64,32 @@
           "sku": {
             "en": "5fe602ea5e2da8"
           },
-          "productPrice": 7.25,
-          "price": {
+          "productPrice": {
+            "en": 7.25
+          },
+          "retailPrice": {
             "en": 18
           },
-          "shippingRates": [
-            {
-              "country": "FR",
-              "rate": 5.1
-            },
-            {
-              "country": "GB",
-              "rate": 5.1
-            },
-            {
-              "country": "US",
-              "rate": 4.5
-            },
-            {
-              "country": "CA",
-              "rate": 5.45
-            }
-          ],
+          "shippingRates": {
+            "en": [
+              {
+                "country": "FR",
+                "rate": 5.1
+              },
+              {
+                "country": "GB",
+                "rate": 5.1
+              },
+              {
+                "country": "US",
+                "rate": 4.5
+              },
+              {
+                "country": "CA",
+                "rate": 5.45
+              }
+            ]
+          },
           "images": {
             "en": []
           },
@@ -95,28 +103,32 @@
           "sku": {
             "en": "5fe602ea5e2e05"
           },
-          "productPrice": 8.75,
-          "price": {
+          "productPrice": {
+            "en": 8.75
+          },
+          "retailPrice": {
             "en": 21
           },
-          "shippingRates": [
-            {
-              "country": "FR",
-              "rate": 5.1
-            },
-            {
-              "country": "GB",
-              "rate": 5.1
-            },
-            {
-              "country": "US",
-              "rate": 4.5
-            },
-            {
-              "country": "CA",
-              "rate": 5.45
-            }
-          ],
+          "shippingRates": {
+            "en": [
+              {
+                "country": "FR",
+                "rate": 5.1
+              },
+              {
+                "country": "GB",
+                "rate": 5.1
+              },
+              {
+                "country": "US",
+                "rate": 4.5
+              },
+              {
+                "country": "CA",
+                "rate": 5.45
+              }
+            ]
+          },
           "images": {
             "en": []
           },
@@ -130,28 +142,32 @@
           "sku": {
             "en": "5fe602ea5e2e79"
           },
-          "productPrice": 9.25,
-          "price": {
+          "productPrice": {
+            "en": 9.25
+          },
+          "retailPrice": {
             "en": 24
           },
-          "shippingRates": [
-            {
-              "country": "FR",
-              "rate": 5.1
-            },
-            {
-              "country": "GB",
-              "rate": 5.1
-            },
-            {
-              "country": "US",
-              "rate": 4.5
-            },
-            {
-              "country": "CA",
-              "rate": 5.45
-            }
-          ],
+          "shippingRates": {
+            "en": [
+              {
+                "country": "FR",
+                "rate": 5.1
+              },
+              {
+                "country": "GB",
+                "rate": 5.1
+              },
+              {
+                "country": "US",
+                "rate": 4.5
+              },
+              {
+                "country": "CA",
+                "rate": 5.45
+              }
+            ]
+          },
           "images": {
             "en": []
           },
@@ -165,28 +181,32 @@
           "sku": {
             "en": "5fe602ea5e2ed4"
           },
-          "productPrice": 10.95,
-          "price": {
+          "productPrice": {
+            "en": 10.95
+          },
+          "retailPrice": {
             "en": 27
           },
-          "shippingRates": [
-            {
-              "country": "FR",
-              "rate": 5.1
-            },
-            {
-              "country": "GB",
-              "rate": 5.1
-            },
-            {
-              "country": "US",
-              "rate": 4.5
-            },
-            {
-              "country": "CA",
-              "rate": 5.45
-            }
-          ],
+          "shippingRates": {
+            "en": [
+              {
+                "country": "FR",
+                "rate": 5.1
+              },
+              {
+                "country": "GB",
+                "rate": 5.1
+              },
+              {
+                "country": "US",
+                "rate": 4.5
+              },
+              {
+                "country": "CA",
+                "rate": 5.45
+              }
+            ]
+          },
           "images": {
             "en": []
           },
@@ -220,28 +240,32 @@
           "sku": {
             "en": "5fe6026b2dd197"
           },
-          "productPrice": 9.95,
-          "price": {
+          "productPrice": {
+            "en": 9.95
+          },
+          "retailPrice": {
             "en": 20
           },
-          "shippingRates": [
-            {
-              "country": "FR",
-              "rate": 5.1
-            },
-            {
-              "country": "GB",
-              "rate": 5.1
-            },
-            {
-              "country": "US",
-              "rate": 4.5
-            },
-            {
-              "country": "CA",
-              "rate": 5.45
-            }
-          ],
+          "shippingRates": {
+            "en": [
+              {
+                "country": "FR",
+                "rate": 5.1
+              },
+              {
+                "country": "GB",
+                "rate": 5.1
+              },
+              {
+                "country": "US",
+                "rate": 4.5
+              },
+              {
+                "country": "CA",
+                "rate": 5.45
+              }
+            ]
+          },
           "images": {
             "en": []
           },
@@ -255,28 +279,32 @@
           "sku": {
             "en": "5fe6026b2dd216"
           },
-          "productPrice": 15.95,
-          "price": {
+          "productPrice": {
+            "en": 15.95
+          },
+          "retailPrice": {
             "en": 35
           },
-          "shippingRates": [
-            {
-              "country": "FR",
-              "rate": 5.55
-            },
-            {
-              "country": "GB",
-              "rate": 5.55
-            },
-            {
-              "country": "US",
-              "rate": 5.4
-            },
-            {
-              "country": "CA",
-              "rate": 6.35
-            }
-          ],
+          "shippingRates": {
+            "en": [
+              {
+                "country": "FR",
+                "rate": 5.55
+              },
+              {
+                "country": "GB",
+                "rate": 5.55
+              },
+              {
+                "country": "US",
+                "rate": 5.4
+              },
+              {
+                "country": "CA",
+                "rate": 6.35
+              }
+            ]
+          },
           "images": {
             "en": []
           },

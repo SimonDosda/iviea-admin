@@ -106,7 +106,12 @@ function productToEntry(product) {
     variants: product.sync_variants.map(parseVariant)
   };
   const images = entry.variants[0].images.en;
-  if (entry.variants.every(variant => JSON.stringify(variant.images.en[0]) === JSON.stringify(images[0]))) {
+  if (
+    entry.variants.every(
+      variant =>
+        JSON.stringify(variant.images.en[0]) === JSON.stringify(images[0])
+    )
+  ) {
     entry.product.images.en = images;
     entry.variants.forEach(variant => (variant.images.en = []));
   }
@@ -117,20 +122,21 @@ function parseProduct(product) {
   return {
     name: { en: product.name },
     sku: { en: product.external_id },
-    images: {en: []}
+    images: { en: [] }
   };
 }
 
 function parseVariant(variant) {
+  const shippingRates = variant.shippingRates.map(shippingRates => ({
+    country: shippingRates.country,
+    rate: parseFloat(shippingRates.shippingRates[0].rate)
+  }));
   return {
     name: { en: variant.name.split(" - ")[1] },
     sku: { en: variant.external_id },
-    productPrice: parseFloat(variant.info.price),
-    price: { en: parseFloat(variant.retail_price) },
-    shippingRates: variant.shippingRates.map(shippingRates => ({
-      country: shippingRates.country,
-      rate: parseFloat(shippingRates.shippingRates[0].rate)
-    })),
+    productPrice: { en: parseFloat(variant.info.price) },
+    retailPrice: { en: parseFloat(variant.retail_price) },
+    shippingRates: { en: shippingRates },
     images: { en: variant.files.map(file => file.preview_url) }
   };
 }
