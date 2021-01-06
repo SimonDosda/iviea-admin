@@ -52,10 +52,16 @@ async function updateEntries(entries) {
       "sys.contentType.sys.id": "product"
     }
   });
+  const seenProducts = [];
+  const seenVariants = [];
 
   currentProducts.items.forEach(async product => {
-    const newEntry = entries.find(entry => entry.product.sku === product.sku);
+    const newEntry = entries.find(
+      entry => entry.product.sku.en === product.sku.en
+    );
+
     if (newEntry) {
+      seenProducts.push(newEntry.product.sku.en);
       product.update({ entryId: product.sys.id }, newEntry.product);
       const currentVariants = await client.entry.getMany({
         query: {
@@ -64,8 +70,16 @@ async function updateEntries(entries) {
         }
       });
       currentVariants.items.forEach(variant => {
-        const newEntry = entries.find(entry => entry.product.sku === product.sku);
-      })
+        const newVariant = newEntry.variants.find(
+          ({ sku }) => sku.en === variant.sku.en
+        );
+        if (newVariant) {
+          seenVariants.push(newVariant.sku.en);
+          client.entry.update({ entryId: variant.sys.id }, newVariant);
+        } else {
+          client.entry.delete({ entryId: variant.sys.id });
+        }
+      });
     } else {
       client.entry.delete({ entryId: product.sys.id });
       const currentVariants = await client.entry.getMany({
@@ -77,27 +91,36 @@ async function updateEntries(entries) {
       console.log(currentVariants);
       currentVariants.items.forEach(variant => {
         client.entry.delete({ entryId: variant.sys.id });
-      })
+      });
     }
   });
-  console.log(currentProducts);
-  // entries.forEach(async ({ product, variants }) => {
-  //   const entry = await createEntry("product", {
-  //     ...product,
-  //     images: { en: [] }
-  //   });
-  //   variants.forEach(variant => {
-  //     createEntry("variant", {
-  //       ...variant,
-  //       images: { en: [] },
-  //       product: {
-  //         en: {
-  //           sys: { id: entry.sys.id, linkType: "Entry", type: "Link" }
-  //         }
-  //       }
-  //     });
-  //   });
-  // });
+
+  entries.forEach(async ({ product, variants }) => {
+    let entry = null;
+    if (!seenProducts.contains(product.sku.en)) {
+      entry = await createEntry("product", {
+        ...product,
+        images: { en: [] }
+      });
+    } else {
+      entry = currentProducts.items.find(
+        ({ sku }) => sku.en === product.sku.en
+      );
+    }
+    variants.forEach(variant => {
+      if (!seenVariants.contains(variant.sku.en)) {
+        createEntry("variant", {
+          ...variant,
+          images: { en: [] },
+          product: {
+            en: {
+              sys: { id: entry.sys.id, linkType: "Entry", type: "Link" }
+            }
+          }
+        });
+      }
+    });
+  });
 }
 
 module.exports = { getEntries, getProductEntries, createEntry, updateEntries };
