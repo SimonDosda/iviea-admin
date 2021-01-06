@@ -53,8 +53,16 @@ async function updateEntries(entries) {
     });
   
   currentProducts.items.forEach(product => {
-    newProduct = entries.find((entry) => entry.product.sku ===  )
-    if ()
+    const newEntry = entries.find((entry) => entry.product.sku === product.sku );
+    if (newEntry) {
+      product.update(newEntry.product);
+    } else {
+      client.entry.delete({entryId: product.id});
+      const currentProducts = await client.entry.getMany({
+      query: { skip: 0, limit: 100 ,
+      "sys.contentType.sys.id": "product"}
+    });
+    }
   })
     console.log(currentProducts)
   // entries.forEach(async ({ product, variants }) => {
