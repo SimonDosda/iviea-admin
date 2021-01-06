@@ -65,7 +65,10 @@ const app = new Vue({
                 100
             ) / 100
         },
-        { name: "retail price all inc.", value: variant.price.en }
+        { name: "retail price all inc.", value: variant.price.en },
+        { name: "net retail price", value: Math.round(variant.price.en * 75) / 100 },
+        { name: "margin", value: Math.round((variant.price.en * 0.75 - variant.productPrice +
+                Math.max(...variant.shippingRates.map(({ rate }) => rate))) * 100) / 100  }
       ];
     }
   }
