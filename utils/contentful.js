@@ -13,7 +13,9 @@ const client = contentful.createClient(
 );
 
 async function getEntries(contentTypes) {
-  const entries = await client.entry.getMany({});
+  const entries = await client.entry.getMany({
+    query: { skip: 0, limit: 100 }
+  });
   return entries.items.filter(item =>
     contentTypes.includes(item.sys.contentType.sys.id)
   );
@@ -45,29 +47,29 @@ async function createEntry(contentTypeId, fields) {
 }
 
 async function updateEntries(entries) {
-  const currentEntries = await client.entry.getMany({});
   
-  currentEntries.forEach(entry => {
-    
-  })
-  
-  entries.forEach(async ({ product, variants }) => {
-    const entry = await createEntry("product", {
-      ...product,
-      images: { en: [] }
+    const currentProducts = await client.entry.getMany({
+      query: { skip: 0, limit: 100 },
+      "item.sys.contentType.sys.id": "product"
     });
-    variants.forEach(variant => {
-      createEntry("variant", {
-        ...variant,
-        images: { en: [] },
-        product: {
-          en: {
-            sys: { id: entry.sys.id, linkType: "Entry", type: "Link" }
-          }
-        }
-      });
-    });
-  });
+    console.log(currentProducts)
+  // entries.forEach(async ({ product, variants }) => {
+    // const entry = await createEntry("product", {
+    //   ...product,
+    //   images: { en: [] }
+    // });
+    // variants.forEach(variant => {
+    //   createEntry("variant", {
+    //     ...variant,
+    //     images: { en: [] },
+    //     product: {
+    //       en: {
+    //         sys: { id: entry.sys.id, linkType: "Entry", type: "Link" }
+    //       }
+    //     }
+    //   });
+    // });
+  // });
 }
 
 module.exports = { getEntries, getProductEntries, createEntry, updateEntries };
