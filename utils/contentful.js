@@ -47,28 +47,32 @@ async function createEntry(contentTypeId, fields) {
 }
 
 async function updateEntries(entries) {
-  
     const currentProducts = await client.entry.getMany({
-      query: { skip: 0, limit: 100 },
-      "item.sys.contentType.sys.id": "product"
+      query: { skip: 0, limit: 100 ,
+      "sys.contentType.sys.id": "product"}
     });
+  
+  currentProducts.items.forEach(product => {
+    newProduct = entries.find((entry) => entry.product.sku ===  )
+    if ()
+  })
     console.log(currentProducts)
   // entries.forEach(async ({ product, variants }) => {
-    // const entry = await createEntry("product", {
-    //   ...product,
-    //   images: { en: [] }
-    // });
-    // variants.forEach(variant => {
-    //   createEntry("variant", {
-    //     ...variant,
-    //     images: { en: [] },
-    //     product: {
-    //       en: {
-    //         sys: { id: entry.sys.id, linkType: "Entry", type: "Link" }
-    //       }
-    //     }
-    //   });
-    // });
+  //   const entry = await createEntry("product", {
+  //     ...product,
+  //     images: { en: [] }
+  //   });
+  //   variants.forEach(variant => {
+  //     createEntry("variant", {
+  //       ...variant,
+  //       images: { en: [] },
+  //       product: {
+  //         en: {
+  //           sys: { id: entry.sys.id, linkType: "Entry", type: "Link" }
+  //         }
+  //       }
+  //     });
+  //   });
   // });
 }
 
