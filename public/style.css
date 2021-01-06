@@ -47,3 +47,11 @@ img {
   max-height: 100%;
   max-width: 100%;
 }
+
+th, td {
+  padding: 10px;
+}
+
+td {
+  text-align: right;
+}
