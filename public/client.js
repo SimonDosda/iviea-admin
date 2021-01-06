@@ -59,7 +59,7 @@ const app = new Vue({
       const round = value => Math.round(value * 100) / 100;
       const formatPrice = value => Math.round(value * 100) / 100 + " €";
       const formatPercent = value => Math.round(value * 1000) / 10 + " %";
-      
+
       return [
         { name: "name", value: variant.name.en },
         { name: "product price", value: variant.productPrice },
@@ -68,8 +68,15 @@ const app = new Vue({
         { name: "total price w/ tax", value: formatPrice(totalPrice) },
         { name: "retail price all inc.", value: formatPrice(variant.price.en) },
         { name: "net retail price", value: formatPrice(netRetailPrice) },
-        { name: "margin", value: formatPrice(margin) },
-        { name: "margin", value: formatPrice(margin) }
+        { name: "margin €", value: formatPrice(margin) },
+        {
+          name: "margin %",
+          value: formatPercent(margin / variant.price.en)
+        },
+        {
+          name: "advise",
+          value: formatPrice(totalPrice / (0.75 - 0.3))
+        }
       ];
     }
   }
