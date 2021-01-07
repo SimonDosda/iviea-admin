@@ -98,7 +98,7 @@ async function updateEntries(entries) {
 
   entries.forEach(async ({ product, variants }) => {
     let entry = null;
-    if (!seenProducts.contains(product.sku.en)) {
+    if (!seenProducts.includes(product.sku.en)) {
       entry = await createEntry("product", {
         ...product,
         images: { en: [] }
@@ -109,7 +109,7 @@ async function updateEntries(entries) {
       );
     }
     variants.forEach(variant => {
-      if (!seenVariants.contains(variant.sku.en)) {
+      if (!seenVariants.includes(variant.sku.en)) {
         createEntry("variant", {
           ...variant,
           images: { en: [] },
