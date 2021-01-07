@@ -56,14 +56,16 @@ async function updateEntries(entries) {
     }
   });
 
-  currentProducts.items.forEach(async product => {
-    const newEntry = entries.find(
-      entry => entry.product.sku.en === product.sku.en
+  for (let index = 0; index < currentProducts.items.length; index++) {
+    const product = currentProducts.items[index];
+    console.log(product);
+    const newEntry = await entries.find(
+      entry => entry.product.sku.en === product.fields.sku.en
     );
 
     if (newEntry) {
       seenProducts.push(newEntry.product.sku.en);
-      product.update({ entryId: product.sys.id }, newEntry.product);
+      client.entry.update({ entryId: product.sys.id }, {fields: newEntry.product});
       const currentVariants = await client.entry.getMany({
         query: {
           "sys.contentType.sys.id": "variants",
@@ -94,9 +96,10 @@ async function updateEntries(entries) {
         client.entry.delete({ entryId: variant.sys.id });
       });
     }
-  });
+  };
 
-  entries.forEach(async ({ product, variants }) => {
+  for (let index = 0; index < entries.length; index++) {
+    const { product, variants } = entries[index]; 
     let entry = null;
     if (!seenProducts.includes(product.sku.en)) {
       entry = await createEntry("product", {
@@ -121,7 +124,7 @@ async function updateEntries(entries) {
         });
       }
     });
-  });
+  };
 }
 
 module.exports = { getEntries, getProductEntries, createEntry, updateEntries };
