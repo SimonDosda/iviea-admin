@@ -30,12 +30,17 @@ async function getProductEntries(entries) {
       res[entry.sys.id].product = entry.fields;
     } else {
       const fields = { ...entry.fields };
+      if (fields.product) {
+        
       const productId = fields.product.en.sys.id;
       delete fields.product;
       if (!(productId in res)) {
         res[productId] = { variants: [] };
       }
       res[productId].variants.push(fields);
+      } else {
+        console.log(fields.name.en + ' is not link to a product')
+      }
     }
     return res;
   }, {});
