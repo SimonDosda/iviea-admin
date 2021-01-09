@@ -45,16 +45,16 @@
           <button v-on:click="updateEntries" class="btn">
             Update Entries
           </button>
-          <button v-on:click="addEntries" class="btn">
-            Add Entries
+          <button v-on:click="syncEntries" class="btn">
+            Sync Entries
           </button>
         </div>
 
         <div v-for="entry in entries" class="products">
           <div class="product">
-            <div class="image">
+<!--             <div class="image">
               <img :src="entry.product.images.en[0]" />
-            </div>
+            </div> -->
             <h2>
               {{ entry.product.name.en}}
             </h2>

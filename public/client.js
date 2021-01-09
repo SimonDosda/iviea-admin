@@ -39,7 +39,7 @@ const app = new Vue({
         body: JSON.stringify({ entries: this.entries })
       });
     },
-    addEntries: function() {
+    syncEntries: function() {
       this.fetchApi("entries", {
         method: "POST",
         body: JSON.stringify({ entries: this.entries })
@@ -62,7 +62,7 @@ const app = new Vue({
         { name: "name", value: variant.name.en },
         { name: "product price", value: variant.productPrice.en },
         { name: "min shipping rate", value: formatPrice(minShippingRate) },
-        { name: "maw shipping rate", value: formatPrice(maxShippingRate) },
+        { name: "max shipping rate", value: formatPrice(maxShippingRate) },
         { name: "total price w/ tax", value: formatPrice(totalPrice) },
         { name: "retail price all inc.", value: formatPrice(retailPrice) },
         { name: "net retail price", value: formatPrice(retailPrice * netRate) },
