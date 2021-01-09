@@ -55,15 +55,17 @@ async function updateEntries(entries) {
       "sys.contentType.sys.id": "product"
     }
   });
-  const currentVariants = await client.entry
-        .getMany({
-          query: {
-            "sys.contentType.sys.id": "variants"
-          }
-        });
+  const currentVariants = await client.entry.getMany({
+    query: {
+      "sys.contentType.sys.id": "variant"
+    }
+  });
 
   for (let index = 0; index < currentProducts.items.length; index++) {
     const product = currentProducts.items[index];
+    const productVariants = currentVariants.items.filter(
+      ({ fields }) => fields.product.en.sys.id === product.sys.id
+    );
     const newEntry = await entries.find(
       entry => entry.product.sku.en === product.fields.sku.en
     );
@@ -74,28 +76,22 @@ async function updateEntries(entries) {
         { entryId: product.sys.id },
         { fields: newEntry.product, sys: product.sys }
       );
-      ).items
-        .filter(fields => fields.product.en.sys.id === product.sys.id);
-      currentVariants.forEach(variant => {
+      productVariants.forEach(variant => {
         const newVariant = newEntry.variants.find(
-          ({ sku }) => sku.en === variant.sku.en
+          ({ sku }) => sku.en === variant.fields.sku.en
         );
         if (newVariant) {
           seenVariants.push(newVariant.sku.en);
-          client.entry.update({ entryId: variant.sys.id }, newVariant);
+          client.entry.update(
+            { entryId: variant.sys.id },
+            { fields: newVariant, sys: variant.sys }
+          );
         } else {
           client.entry.delete({ entryId: variant.sys.id });
         }
       });
     } else {
       client.entry.delete({ entryId: product.sys.id });
-      const currentVariants = (await client.entry
-        .getMany({
-          query: {
-            "sys.contentType.sys.id": "variants"
-          }
-        })).items
-        .filter(fields => fields.product.en.sys.id === product.sys.id);
       currentVariants.forEach(variant => {
         client.entry.delete({ entryId: variant.sys.id });
       });
