@@ -65,7 +65,7 @@ async function updateEntries(entries) {
 
     if (newEntry) {
       seenProducts.push(newEntry.product.sku.en);
-      client.entry.update({ entryId: product.sys.id }, {fields: newEntry.product});
+      client.entry.update({ entryId: product.sys.id }, {fields: newEntry.product, sys: product.sys});
       const currentVariants = await client.entry.getMany({
         query: {
           "sys.contentType.sys.id": "variants",
@@ -108,7 +108,7 @@ async function updateEntries(entries) {
       });
     } else {
       entry = currentProducts.items.find(
-        ({ sku }) => sku.en === product.sku.en
+        ({ fields }) => fields.sku.en === product.sku.en
       );
     }
     variants.forEach(variant => {
