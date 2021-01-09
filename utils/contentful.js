@@ -55,10 +55,15 @@ async function updateEntries(entries) {
       "sys.contentType.sys.id": "product"
     }
   });
+  const currentVariants = await client.entry
+        .getMany({
+          query: {
+            "sys.contentType.sys.id": "variants"
+          }
+        });
 
   for (let index = 0; index < currentProducts.items.length; index++) {
     const product = currentProducts.items[index];
-    console.log(product);
     const newEntry = await entries.find(
       entry => entry.product.sku.en === product.fields.sku.en
     );
@@ -69,14 +74,9 @@ async function updateEntries(entries) {
         { entryId: product.sys.id },
         { fields: newEntry.product, sys: product.sys }
       );
-      const currentVariants = await client.entry
-        .getMany({
-          query: {
-            "sys.contentType.sys.id": "variants"
-          }
-        })
+      ).items
         .filter(fields => fields.product.en.sys.id === product.sys.id);
-      currentVariants.items.forEach(variant => {
+      currentVariants.forEach(variant => {
         const newVariant = newEntry.variants.find(
           ({ sku }) => sku.en === variant.sku.en
         );
@@ -89,15 +89,14 @@ async function updateEntries(entries) {
       });
     } else {
       client.entry.delete({ entryId: product.sys.id });
-      const currentVariants = await client.entry
+      const currentVariants = (await client.entry
         .getMany({
           query: {
             "sys.contentType.sys.id": "variants"
           }
-        })
+        })).items
         .filter(fields => fields.product.en.sys.id === product.sys.id);
-      console.log(currentVariants);
-      currentVariants.items.forEach(variant => {
+      currentVariants.forEach(variant => {
         client.entry.delete({ entryId: variant.sys.id });
       });
     }
