@@ -49,7 +49,7 @@ async function createEntry(contentTypeId, fields) {
 async function updateEntries(entries) {
   const seenProducts = [];
   const seenVariants = [];
-  
+
   const currentProducts = await client.entry.getMany({
     query: {
       "sys.contentType.sys.id": "product"
@@ -65,13 +65,17 @@ async function updateEntries(entries) {
 
     if (newEntry) {
       seenProducts.push(newEntry.product.sku.en);
-      client.entry.update({ entryId: product.sys.id }, {fields: newEntry.product, sys: product.sys});
-      const currentVariants = await client.entry.getMany({
-        query: {
-          "sys.contentType.sys.id": "variants",
-          "fields.product.id": product.id
-        }
-      });
+      client.entry.update(
+        { entryId: product.sys.id },
+        { fields: newEntry.product, sys: product.sys }
+      );
+      const currentVariants = await client.entry
+        .getMany({
+          query: {
+            "sys.contentType.sys.id": "variants"
+          }
+        })
+        .filter(fields => fields.product.en.sys.id === product.sys.id);
       currentVariants.items.forEach(variant => {
         const newVariant = newEntry.variants.find(
           ({ sku }) => sku.en === variant.sku.en
@@ -85,21 +89,22 @@ async function updateEntries(entries) {
       });
     } else {
       client.entry.delete({ entryId: product.sys.id });
-      const currentVariants = await client.entry.getMany({
-        query: {
-          "sys.contentType.sys.id": "variants",
-          "fields.product.id": product.id
-        }
-      });
+      const currentVariants = await client.entry
+        .getMany({
+          query: {
+            "sys.contentType.sys.id": "variants"
+          }
+        })
+        .filter(fields => fields.product.en.sys.id === product.sys.id);
       console.log(currentVariants);
       currentVariants.items.forEach(variant => {
         client.entry.delete({ entryId: variant.sys.id });
       });
     }
-  };
+  }
 
   for (let index = 0; index < entries.length; index++) {
-    const { product, variants } = entries[index]; 
+    const { product, variants } = entries[index];
     let entry = null;
     if (!seenProducts.includes(product.sku.en)) {
       entry = await createEntry("product", {
@@ -124,7 +129,7 @@ async function updateEntries(entries) {
         });
       }
     });
-  };
+  }
 }
 
 module.exports = { getEntries, getProductEntries, createEntry, updateEntries };
