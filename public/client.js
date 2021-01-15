@@ -1,3 +1,5 @@
+const locale = "en-US";
+
 const app = new Vue({
   el: "#app",
   data: {
@@ -46,11 +48,13 @@ const app = new Vue({
       });
     },
     getFields: function(variant) {
-      const shippingRates = variant.shippingRates.en.map(({ rate }) => rate);
+      const shippingRates = variant.shippingRates[locale].map(
+        ({ rate }) => rate
+      );
       const minShippingRate = Math.min(...shippingRates);
       const maxShippingRate = Math.max(...shippingRates);
-      const totalPrice = variant.productPrice.en + maxShippingRate;
-      const retailPrice = variant.retailPrice.en;
+      const totalPrice = variant.productPrice[locale] + maxShippingRate;
+      const retailPrice = variant.retailPrice[locale];
       const netRate = 0.75;
       const margin = retailPrice * netRate - totalPrice;
 
@@ -59,12 +63,18 @@ const app = new Vue({
       const formatPercent = value => Math.round(value * 1000) / 10 + " %";
 
       return [
-        { name: "name", value: variant.name.en },
-        { name: "product price", value: variant.productPrice.en },
+        { name: "name", value: variant.name[locale] },
+        { name: "product price", value: variant.productPrice[locale] },
         { name: "min shipping rate", value: formatPrice(minShippingRate) },
         { name: "max shipping rate", value: formatPrice(maxShippingRate) },
         { name: "total price w/ tax", value: formatPrice(totalPrice) },
-        { name: "retail price all inc.", field: retailPrice, value: formatPrice(retailPrice), editable: true, setValue: (value) => variant.retailPrice.en = value},
+        {
+          name: "retail price all inc.",
+          field: retailPrice,
+          editable: true,
+          value: formatPrice(retailPrice),
+          setValue: value => (variant.retailPrice[locale] = parseInt(value))
+        },
         { name: "net retail price", value: formatPrice(retailPrice * netRate) },
         { name: "margin €", value: formatPrice(margin) },
         {
