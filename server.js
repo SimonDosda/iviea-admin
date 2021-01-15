@@ -15,6 +15,7 @@ const db = require("./db");
 // helpers
 const contentful = require("./utils/contentful");
 const printful = require("./utils/printful");
+const locale = "en-US";
 
 // http://expressjs.com/en/starter/basic-routing.html
 app.get("/", (request, response) => {
@@ -31,7 +32,7 @@ app.get("/api/products", async (request, response) => {
   const entries = contentfulEntries.reduce((res, entry) => {
     return {
       ...res,
-      [entry.product.sku.en]: {
+      [entry.product.sku[locale]]: {
         product: {
           ...entry.product
           // contentful: true,
@@ -46,10 +47,10 @@ app.get("/api/products", async (request, response) => {
     };
   }, {});
   printfulEntries.forEach(entry => {
-    if (entry.product.sku.en in entries) {
+    if (entry.product.sku[locale] in entries) {
       // entries[entry.product.sku.en].printful = true;
     } else {
-      entries[entry.product.sku.en] = {
+      entries[entry.product.sku[locale]] = {
         product: {
           ...entry.product
           // contentful: false,

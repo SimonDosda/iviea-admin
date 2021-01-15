@@ -12,6 +12,8 @@ const client = contentful.createClient(
   }
 );
 
+const locale = "en-US";
+
 async function getEntries(contentTypes) {
   const entries = await client.entry.getMany({
     query: { skip: 0, limit: 100 }
@@ -31,15 +33,14 @@ async function getProductEntries(entries) {
     } else {
       const fields = { ...entry.fields };
       if (fields.product) {
-        
-      const productId = fields.product.en.sys.id;
-      delete fields.product;
-      if (!(productId in res)) {
-        res[productId] = { variants: [] };
-      }
-      res[productId].variants.push(fields);
+        const productId = fields.product[locale].sys.id;
+        delete fields.product;
+        if (!(productId in res)) {
+          res[productId] = { variants: [] };
+        }
+        res[productId].variants.push(fields);
       } else {
-        console.log(fields.name.en + ' is not link to a product')
+        console.log(fields.name[locale] + " is not link to a product");
       }
     }
     return res;
@@ -69,24 +70,24 @@ async function updateEntries(entries) {
   for (let index = 0; index < currentProducts.items.length; index++) {
     const product = currentProducts.items[index];
     const productVariants = currentVariants.items.filter(
-      ({ fields }) => fields.product.en.sys.id === product.sys.id
+      ({ fields }) => fields.product[locale].sys.id === product.sys.id
     );
     const newEntry = await entries.find(
-      entry => entry.product.sku.en === product.fields.sku.en
+      entry => entry.product.sku[locale] === product.fields.sku[locale]
     );
 
     if (newEntry) {
-      seenProducts.push(newEntry.product.sku.en);
+      seenProducts.push(newEntry.product.sku[locale]);
       client.entry.update(
         { entryId: product.sys.id },
         { fields: newEntry.product, sys: product.sys }
       );
       productVariants.forEach(variant => {
         const newVariant = newEntry.variants.find(
-          ({ sku }) => sku.en === variant.fields.sku.en
+          ({ sku }) => sku[locale] === variant.fields.sku[locale]
         );
         if (newVariant) {
-          seenVariants.push(newVariant.sku.en);
+          seenVariants.push(newVariant.sku[locale]);
           client.entry.update(
             { entryId: variant.sys.id },
             { fields: newVariant, sys: variant.sys }
@@ -106,23 +107,23 @@ async function updateEntries(entries) {
   for (let index = 0; index < entries.length; index++) {
     const { product, variants } = entries[index];
     let entry = null;
-    if (!seenProducts.includes(product.sku.en)) {
+    if (!seenProducts.includes(product.sku[locale])) {
       entry = await createEntry("product", {
         ...product,
         images: { en: [] }
       });
     } else {
       entry = currentProducts.items.find(
-        ({ fields }) => fields.sku.en === product.sku.en
+        ({ fields }) => fields.sku[locale] === product.sku[locale]
       );
     }
     variants.forEach(variant => {
-      if (!seenVariants.includes(variant.sku.en)) {
+      if (!seenVariants.includes(variant.sku[locale])) {
         createEntry("variant", {
           ...variant,
           images: { en: [] },
           product: {
-            en: {
+            [locale]: {
               sys: { id: entry.sys.id, linkType: "Entry", type: "Link" }
             }
           }

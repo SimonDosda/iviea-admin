@@ -1,5 +1,7 @@
 const fetch = require("node-fetch");
 
+const locale = "en-US"
+
 async function getProducts() {
   const res = await fetch("https://api.printful.com/sync/products", {
     method: "GET",
@@ -105,24 +107,24 @@ function productToEntry(product) {
     product: parseProduct(product.sync_product),
     variants: product.sync_variants.map(parseVariant)
   };
-  const images = entry.variants[0].images.en;
+  const images = entry.variants[0].images[locale];
   if (
     entry.variants.every(
       variant =>
-        JSON.stringify(variant.images.en[0]) === JSON.stringify(images[0])
+        JSON.stringify(variant.images[locale][0]) === JSON.stringify(images[0])
     )
   ) {
-    entry.product.images.en = images;
-    entry.variants.forEach(variant => (variant.images.en = []));
+    entry.product.images[locale] = images;
+    entry.variants.forEach(variant => (variant.images[locale] = []));
   }
   return entry;
 }
 
 function parseProduct(product) {
   return {
-    name: { en: product.name },
-    sku: { en: product.external_id },
-    images: { en: [] }
+    name: { [locale]: product.name },
+    sku: { [locale]: product.external_id },
+    images: { [locale]: [] }
   };
 }
 
@@ -132,12 +134,12 @@ function parseVariant(variant) {
     rate: parseFloat(shippingRates.shippingRates[0].rate)
   }));
   return {
-    name: { en: variant.name.split(" - ")[1] },
-    sku: { en: variant.external_id },
-    productPrice: { en: parseFloat(variant.info.price) },
-    retailPrice: { en: parseFloat(variant.retail_price) },
-    shippingRates: { en: shippingRates },
-    images: { en: variant.files.map(file => file.preview_url) }
+    name: { [locale]: variant.name.split(" - ")[1] },
+    sku: { [locale]: variant.external_id },
+    productPrice: { [locale]: parseFloat(variant.info.price) },
+    retailPrice: { [locale]: parseFloat(variant.retail_price) },
+    shippingRates: { [locale]: shippingRates },
+    images: { [locale]: variant.files.map(file => file.preview_url) }
   };
 }
 
