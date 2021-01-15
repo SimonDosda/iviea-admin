@@ -90,7 +90,21 @@ async function updateEntries(entries) {
           seenVariants.push(newVariant.sku[locale]);
           client.entry.update(
             { entryId: variant.sys.id },
-            { fields: newVariant, sys: variant.sys }
+            {
+              fields: {
+                ...newVariant,
+                product: {
+                  [locale]: {
+                    sys: {
+                      id: product.sys.id,
+                      linkType: "Entry",
+                      type: "Link"
+                    }
+                  }
+                }
+              },
+              sys: variant.sys
+            }
           );
         } else {
           client.entry.delete({ entryId: variant.sys.id });
@@ -98,7 +112,7 @@ async function updateEntries(entries) {
       });
     } else {
       client.entry.delete({ entryId: product.sys.id });
-      currentVariants.forEach(variant => {
+      productVariants.forEach(variant => {
         client.entry.delete({ entryId: variant.sys.id });
       });
     }
