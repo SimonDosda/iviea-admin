@@ -64,7 +64,7 @@ const app = new Vue({
         { name: "min shipping rate", value: formatPrice(minShippingRate) },
         { name: "max shipping rate", value: formatPrice(maxShippingRate) },
         { name: "total price w/ tax", value: formatPrice(totalPrice) },
-        { name: "retail price all inc.", value: formatPrice(retailPrice) },
+        { name: "retail price all inc.", value: formatPrice(retailPrice), editable: true, setValue: (value) => retailPrice = value},
         { name: "net retail price", value: formatPrice(retailPrice * netRate) },
         { name: "margin €", value: formatPrice(margin) },
         {

@@ -70,7 +70,8 @@
           <tbody>
             <tr v-for="variant in entry.variants">
               <td v-for="field in getFields(variant)">
-                {{field.value}}
+                {{field.value}} 
+                <input type="number" v-if="field.editable" value="{{field.value}}" />
               </td>
             </tr>
           </tbody>
