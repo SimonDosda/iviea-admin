@@ -110,7 +110,7 @@ async function updateEntries(entries) {
     if (!seenProducts.includes(product.sku[locale])) {
       entry = await createEntry("product", {
         ...product,
-        images: { en: [] }
+        images: { [locale]: [] }
       });
     } else {
       entry = currentProducts.items.find(
@@ -121,7 +121,7 @@ async function updateEntries(entries) {
       if (!seenVariants.includes(variant.sku[locale])) {
         createEntry("variant", {
           ...variant,
-          images: { en: [] },
+          images: { [locale]: [] },
           product: {
             [locale]: {
               sys: { id: entry.sys.id, linkType: "Entry", type: "Link" }
