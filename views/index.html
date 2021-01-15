@@ -53,10 +53,10 @@
         <div v-for="entry in entries" class="products">
           <div class="product">
 <!--             <div class="image">
-              <img :src="entry.product.images.en[0]" />
+              <img :src="entry.product.images[locale][0]" />
             </div> -->
             <h2>
-              {{ entry.product.name.en}}
+              {{ entry.product.name[locale]}}
             </h2>
           </div>
           <table>

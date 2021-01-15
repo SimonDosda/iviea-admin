@@ -1,12 +1,11 @@
-const locale = "en-US";
-
 const app = new Vue({
   el: "#app",
   data: {
     title: "Syncful",
     token: null,
     entries: [],
-    error: null
+    error: null,
+    locale: "en-US"
   },
   methods: {
     fetchApi: function(route, params) {
@@ -48,13 +47,13 @@ const app = new Vue({
       });
     },
     getFields: function(variant) {
-      const shippingRates = variant.shippingRates[locale].map(
+      const shippingRates = variant.shippingRates[this.locale].map(
         ({ rate }) => rate
       );
       const minShippingRate = Math.min(...shippingRates);
       const maxShippingRate = Math.max(...shippingRates);
-      const totalPrice = variant.productPrice[locale] + maxShippingRate;
-      const retailPrice = variant.retailPrice[locale];
+      const totalPrice = variant.productPrice[this.locale] + maxShippingRate;
+      const retailPrice = variant.retailPrice[this.locale];
       const netRate = 0.75;
       const margin = retailPrice * netRate - totalPrice;
 
@@ -63,8 +62,8 @@ const app = new Vue({
       const formatPercent = value => Math.round(value * 1000) / 10 + " %";
 
       return [
-        { name: "name", value: variant.name[locale] },
-        { name: "product price", value: variant.productPrice[locale] },
+        { name: "name", value: variant.name[this.locale] },
+        { name: "product price", value: variant.productPrice[this.locale] },
         { name: "min shipping rate", value: formatPrice(minShippingRate) },
         { name: "max shipping rate", value: formatPrice(maxShippingRate) },
         { name: "total price w/ tax", value: formatPrice(totalPrice) },
@@ -73,7 +72,7 @@ const app = new Vue({
           field: retailPrice,
           editable: true,
           value: formatPrice(retailPrice),
-          setValue: value => (variant.retailPrice[locale] = parseInt(value))
+          setValue: value => (variant.retailPrice[this.locale] = parseInt(value))
         },
         { name: "net retail price", value: formatPrice(retailPrice * netRate) },
         { name: "margin €", value: formatPrice(margin) },
