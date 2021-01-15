@@ -55,3 +55,7 @@ th, td {
 td {
   text-align: right;
 }
+
+input {
+  width: 50px;
+}

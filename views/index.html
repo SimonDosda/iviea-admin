@@ -36,7 +36,7 @@
         </label>
 
         <div class="buttons">
-          <button v-on:click="getValue" class="btn">
+          <button v-on:click="getProducts" class="btn">
             Get Products
           </button>
           <button v-on:click="getEntries" class="btn">
@@ -70,9 +70,8 @@
           <tbody>
             <tr v-for="variant in entry.variants">
               <td v-for="field in getFields(variant)">
-                {{field.value}} 
-                <input number v-if="field.editable" v-model="field.field" />
-                {{field.field}}
+                <span v-if="!field.editable">{{field.value}}</span> 
+                <input type="number" v-if="field.editable" :value="field.field" v-on:input="field.setValue($event.target.value)"/>
               </td>
             </tr>
           </tbody>
