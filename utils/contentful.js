@@ -45,21 +45,49 @@ async function createEntry(contentTypeId, fields) {
   return await client.entry.create({ contentTypeId }, { fields });
 }
 
-async function updateEntries(entries) {
-  const seenProducts = [];
-  const seenVariants = [];
+async function updateEntries(entries) { 
+  const newVariantsSkus = [];
 
-  const currentProducts = await client.entry.getMany({
-    query: {
-      "sys.contentType.sys.id": "product"
-    }
-  });
   const currentVariants = await client.entry.getMany({
     query: {
       "sys.contentType.sys.id": "variant"
     }
   });
-
+  
+  const seenProducts = [];
+  const currentProducts = await client.entry.getMany({
+    query: {
+      "sys.contentType.sys.id": "product"
+    }
+  
+  });
+  
+  // update or create variants
+for (let entryIndex = 0; entryIndex < entries.length; entryIndex++) {
+  const entry = entries[entryIndex];
+  for (let variantIndex = 0; variantIndex < entry.variants.length; variantIndex++) {
+    const variant = entry.variants[variantIndex];
+    newVariantsSkus.push(variant.sku[locale]);
+    const existingVariant = currentVariants.items.find(item => item.fields.sku[locale] === variant.sku[locale]);
+    if (existingVariant) {
+      client.entry.update(
+            { entryId: existingVariant.sys.id },
+            {              fields: variant,
+              sys: existingVariant.sys
+            }
+          );
+    } else {
+      createEntry("variant", {
+          ...variant,
+          images: { [locale]: [] }
+        });
+    }
+  }
+}
+  
+  
+  
+  
   for (let index = 0; index < currentProducts.items.length; index++) {
     const currentProduct = currentProducts.items[index];
     
@@ -79,26 +107,14 @@ async function updateEntries(entries) {
           seenVariants.push(newVariant.sku[locale]);
           client.entry.update(
             { entryId: variant.sys.id },
-            {
-              fields: {
-                ...newVariant,
-                product: {
-                  [locale]: {
-                    sys: {
-                      id: product.sys.id,
-                      linkType: "Entry",
-                      type: "Link"
-                    }
-                  }
-                }
-              },
+            {              fields: newVariant,
               sys: variant.sys
             }
           );
         } else {
           client.entry.delete({ entryId: variant.sys.id });
         }
-      })
+      });
       client.entry.update(
         { entryId: product.sys.id },
         { fields: newEntry.product, sys: product.sys }
