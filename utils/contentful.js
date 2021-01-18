@@ -24,6 +24,14 @@ async function getEntries(contentTypes) {
 }
 
 async function getProductEntries(entries) {
+  const products = entries.filter(entry => entry.sys.contentType.sys.id === "product");
+  const variantIdByProductId = products.reduce((res, product) => {
+    product.fields.variants[locale].forEach(variant => {
+      res[variant.sys.id] = product.sys.id;
+    })
+    return res;
+  }, {});
+  const variants = entries.filter(entry => entry.sys.contentType.sys.id === "variant");
   const entriesById = entries.reduce((res, entry) => {
     if (entry.sys.contentType.sys.id === "product") {
       if (!(entry.sys.id in res)) {
