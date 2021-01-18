@@ -24,36 +24,21 @@ async function getEntries(contentTypes) {
 }
 
 async function getProductEntries(entries) {
-  const products = entries.filter(entry => entry.sys.contentType.sys.id === "product");
-  const variantIdByProductId = products.reduce((res, product) => {
+  const products = entries.filter(
+    entry => entry.sys.contentType.sys.id === "product"
+  );
+  const variantById = products.reduce((res, product) => {
     product.fields.variants[locale].forEach(variant => {
-      res[variant.sys.id] = product.sys.id;
-    })
+      res[variant.sys.id] = variant.fields;
+    });
     return res;
   }, {});
-  const variants = entries.filter(entry => entry.sys.contentType.sys.id === "variant");
-  const entriesById = entries.reduce((res, entry) => {
-    if (entry.sys.contentType.sys.id === "product") {
-      if (!(entry.sys.id in res)) {
-        res[entry.sys.id] = { variants: [] };
-      }
-      res[entry.sys.id].product = entry.fields;
-    } else {
-      const fields = { ...entry.fields };
-      if (fields.product) {
-        const productId = fields.product[locale].sys.id;
-        delete fields.product;
-        if (!(productId in res)) {
-          res[productId] = { variants: [] };
-        }
-        res[productId].variants.push(fields);
-      } else {
-        console.log(fields.name[locale] + " is not link to a product");
-      }
-    }
-    return res;
-  }, {});
-  return Object.values(entriesById);
+  return products.map(product => ({
+    product: product.fields,
+    variants: product.fields.variants[locale].map(
+      variant => variantById[variant.sys.id]
+    )
+  }));
 }
 
 async function createEntry(contentTypeId, fields) {
@@ -76,24 +61,20 @@ async function updateEntries(entries) {
   });
 
   for (let index = 0; index < currentProducts.items.length; index++) {
-    const product = currentProducts.items[index];
-    const productVariants = currentVariants.items.filter(
-      ({ fields }) => fields.product[locale].sys.id === product.sys.id
-    );
+    const currentProduct = currentProducts.items[index];
+    
     const newEntry = await entries.find(
-      entry => entry.product.sku[locale] === product.fields.sku[locale]
+      entry => entry.product.sku[locale] === currentProduct.fields.sku[locale]
     );
 
     if (newEntry) {
       seenProducts.push(newEntry.product.sku[locale]);
-      client.entry.update(
-        { entryId: product.sys.id },
-        { fields: newEntry.product, sys: product.sys }
-      );
-      productVariants.forEach(variant => {
+      
+      currentProduct.variants[locale].forEach(variant => {
         const newVariant = newEntry.variants.find(
           ({ sku }) => sku[locale] === variant.fields.sku[locale]
         );
+        
         if (newVariant) {
           seenVariants.push(newVariant.sku[locale]);
           client.entry.update(
@@ -117,7 +98,13 @@ async function updateEntries(entries) {
         } else {
           client.entry.delete({ entryId: variant.sys.id });
         }
-      });
+      })
+      client.entry.update(
+        { entryId: product.sys.id },
+        { fields: newEntry.product, sys: product.sys }
+      );
+        
+      
     } else {
       client.entry.delete({ entryId: product.sys.id });
       productVariants.forEach(variant => {
