@@ -85,7 +85,12 @@ for (let entryIndex = 0; entryIndex < entries.length; entryIndex++) {
   }
 }
   
+  // update and create products
   
+  // remove obsolete variants
+  productVariants.forEach(variant => {
+        client.entry.delete({ entryId: variant.sys.id });
+      });
   
   
   for (let index = 0; index < currentProducts.items.length; index++) {
