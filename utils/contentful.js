@@ -46,15 +46,46 @@ async function createEntry(contentTypeId, fields) {
 }
 
 async function updateEntries(entries) { 
-  const newVariantsSkus = [];
-
+  const variantsBySku = {};
   const currentVariants = await client.entry.getMany({
     query: {
       "sys.contentType.sys.id": "variant"
     }
   });
+
   
-  const seenProducts = [];
+  // update or create variants
+  for (let entryIndex = 0; entryIndex < entries.length; entryIndex++) {
+    const entry = entries[entryIndex];
+    for (let variantIndex = 0; variantIndex < entry.variants.length; variantIndex++) {
+      const variant = entry.variants[variantIndex];
+      const existingVariant = currentVariants.items.find(item => item.fields.sku[locale] === variant.sku[locale]);
+      if (existingVariant) {
+        variantsBySku[variant.sku[locale]] = existingVariant;
+        client.entry.update(
+              { entryId: existingVariant.sys.id },
+              {              fields: variant,
+                sys: existingVariant.sys
+              }
+            );
+      } else {
+        const newVariant = await createEntry("variant", {
+            ...variant,
+            images: { [locale]: [] }
+          });
+        variantsBySku[variant.sku[locale]] = newVariant;
+      }
+    }
+  }
+  
+  // remove obsolete variants
+  currentVariants.items.forEach(variant => {
+    if (!variantsBySku[variant.fields.sku[locale]]) {
+        client.entry.delete({ entryId: variant.sys.id });
+  }
+      });
+  
+  
   const currentProducts = await client.entry.getMany({
     query: {
       "sys.contentType.sys.id": "product"
@@ -62,35 +93,26 @@ async function updateEntries(entries) {
   
   });
   
-  // update or create variants
-for (let entryIndex = 0; entryIndex < entries.length; entryIndex++) {
-  const entry = entries[entryIndex];
-  for (let variantIndex = 0; variantIndex < entry.variants.length; variantIndex++) {
-    const variant = entry.variants[variantIndex];
-    newVariantsSkus.push(variant.sku[locale]);
-    const existingVariant = currentVariants.items.find(item => item.fields.sku[locale] === variant.sku[locale]);
-    if (existingVariant) {
-      client.entry.update(
-            { entryId: existingVariant.sys.id },
-            {              fields: variant,
-              sys: existingVariant.sys
-            }
-          );
-    } else {
-      createEntry("variant", {
-          ...variant,
-          images: { [locale]: [] }
-        });
-    }
-  }
-}
-  
-  // update and create products
-  
-  // remove obsolete variants
-  productVariants.forEach(variant => {
-        client.entry.delete({ entryId: variant.sys.id });
-      });
+  // update or create products
+  for (let entryIndex = 0; entryIndex < entries.length; entryIndex++) {
+    const {product, variants} = entries[entryIndex];
+    const existingProduct = currentVariants.items.find(item => item.fields.sku[locale] === variant.sku[locale]);
+      if (existingVariant) {
+        variantsBySku[variant.sku[locale]] = existingVariant;
+        client.entry.update(
+              { entryId: existingVariant.sys.id },
+              {              fields: variant,
+                sys: existingVariant.sys
+              }
+            );
+      } else {
+        const newVariant = await createEntry("variant", {
+            ...variant,
+            images: { [locale]: [] }
+          });
+        variantsBySku[variant.sku[locale]] = newVariant;
+      }
+    
   
   
   for (let index = 0; index < currentProducts.items.length; index++) {
