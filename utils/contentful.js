@@ -1,4 +1,4 @@
-const contentful = require("contentful-management");
+import contentful from "contentful-management";
 
 // init contentful
 const client = contentful.createClient(
@@ -7,63 +7,61 @@ const client = contentful.createClient(
     type: "plain",
     defaults: {
       spaceId: process.env.CONTENTFUL_SPACE_ID,
-      environmentId: process.env.CONTENTFUL_ENV_ID
-    }
+      environmentId: process.env.CONTENTFUL_ENV_ID,
+    },
   }
 );
 
-const locale = "en-US";
+const locale = process.env.CONTENTFUL_LOCALE;
 
-async function getEntries(contentTypes) {
-  const entries = await client.entry.getMany({
-    query: { skip: 0, limit: 100 }
-  });
-  return entries.items.filter(item =>
-    contentTypes.includes(item.sys.contentType.sys.id)
-  );
+async function getEntries() {
+  const entries = await client.entry.getMany({});
+  return entries.items;
 }
 
-async function getProductEntries(entries) {
+export async function getContentfulEntries() {
+  const entries = await getEntries();
   const products = entries.filter(
-    entry => entry.sys.contentType.sys.id === "product"
+    ({ sys }) => sys.contentType.sys.id === "product"
   );
-  const variantById = products.reduce((res, product) => {
-    product.fields.variants[locale].forEach(variant => {
-      res[variant.sys.id] = variant.fields;
-    });
+  const variants = entries.filter(
+    ({ sys }) => sys.contentType.sys.id === "variant"
+  );
+  const variantById = variants.reduce((res, variant) => {
+    res[variant.sys.id] = variant.fields;
     return res;
   }, {});
-  return products.map(product => ({
+  return products.map((product) => ({
     product: product.fields,
     variants: product.fields.variants[locale].map(
-      variant => variantById[variant.sys.id]
-    )
+      (variant) => variantById[variant.sys.id]
+    ),
   }));
 }
 
-async function createEntry(contentTypeId, fields) {
+export async function createEntry(contentTypeId, fields) {
   return await client.entry.create({ contentTypeId }, { fields });
 }
 
-async function updateEntries(entries) {
+export async function updateEntries(entries) {
   const currentVariants = await client.entry.getMany({
     query: {
-      "sys.contentType.sys.id": "variant"
-    }
+      "sys.contentType.sys.id": "variant",
+    },
   });
 
   // update or create variants
   const variantsBySku = {};
   for (let entryIndex = 0; entryIndex < entries.length; entryIndex++) {
-    const entry = entries[entryIndex];
-    for (
-      let variantIndex = 0;
-      variantIndex < entry.variants.length;
-      variantIndex++
-    ) {
-      const variant = entry.variants[variantIndex];
+    const { product, variants } = entries[entryIndex];
+    delete product.printful;
+    delete product.contentful;
+    for (let variantIndex = 0; variantIndex < variants.length; variantIndex++) {
+      const variant = variants[variantIndex];
+      delete variant.printful;
+      delete variant.contentful;
       const existingVariant = currentVariants.items.find(
-        item => item.fields.sku[locale] === variant.sku[locale]
+        (item) => item.fields.sku[locale] === variant.sku[locale]
       );
       if (existingVariant) {
         variantsBySku[variant.sku[locale]] = existingVariant;
@@ -74,7 +72,7 @@ async function updateEntries(entries) {
       } else {
         const newVariant = await createEntry("variant", {
           ...variant,
-          images: { [locale]: [] }
+          images: { [locale]: [] },
         });
         variantsBySku[variant.sku[locale]] = newVariant;
       }
@@ -82,7 +80,7 @@ async function updateEntries(entries) {
   }
 
   // remove obsolete variants
-  currentVariants.items.forEach(variant => {
+  currentVariants.items.forEach((variant) => {
     if (!variantsBySku[variant.fields.sku[locale]]) {
       client.entry.delete({ entryId: variant.sys.id });
     }
@@ -90,8 +88,8 @@ async function updateEntries(entries) {
 
   const currentProducts = await client.entry.getMany({
     query: {
-      "sys.contentType.sys.id": "product"
-    }
+      "sys.contentType.sys.id": "product",
+    },
   });
 
   // update or create products
@@ -100,18 +98,18 @@ async function updateEntries(entries) {
     const fields = {
       ...product,
       variants: {
-        [locale]: variants.map(variant => ({
+        [locale]: variants.map((variant) => ({
           sys: {
             id: variantsBySku[variant.sku[locale]].sys.id,
             linkType: "Entry",
-            type: "Link"
-          }
-        }))
-      }
+            type: "Link",
+          },
+        })),
+      },
     };
 
     const existingProduct = currentProducts.items.find(
-      item => item.fields.sku[locale] === product.sku[locale]
+      (item) => item.fields.sku[locale] === product.sku[locale]
     );
     if (existingProduct) {
       client.entry.update(
@@ -121,16 +119,16 @@ async function updateEntries(entries) {
     } else {
       createEntry("product", {
         ...fields,
-        images: { [locale]: [] }
+        images: { [locale]: [] },
       });
     }
   }
 
   // remove obsolete variants
-  currentProducts.items.forEach(product => {
+  currentProducts.items.forEach((product) => {
     if (
       !entries.find(
-        entry => product.fields.sku[locale] === entry.product.sku[locale]
+        (entry) => product.fields.sku[locale] === entry.product.sku[locale]
       )
     ) {
       client.entry.delete({ entryId: product.sys.id });
@@ -138,4 +136,9 @@ async function updateEntries(entries) {
   });
 }
 
-module.exports = { getEntries, getProductEntries, createEntry, updateEntries };
+export default {
+  getEntries,
+  getProductEntries: getContentfulEntries,
+  createEntry,
+  updateEntries,
+};

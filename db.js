@@ -1,10 +1,8 @@
-const low = require('lowdb')
-const FileSync = require('lowdb/adapters/FileSync')
+import low from 'lowdb'
+import FileSync from 'lowdb/adapters/FileSync.js'
 
 const adapter = new FileSync('.data/db.json')
-const db = low(adapter)
+export const db = low(adapter)
 
 // Set some defaults (required if your JSON file is empty)
 db.defaults({ entries: [] }).write()
-
-module.exports = db;

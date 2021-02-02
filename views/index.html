@@ -36,28 +36,21 @@
         </label>
 
         <div class="buttons">
-          <button v-on:click="getProducts" class="btn">
-            Get Products
+          <button v-on:click="getEntries" class="btn">Get Entries</button>
+          <button v-on:click="getDbEntries" class="btn">Get DB Entries</button>
+          <button v-on:click="saveDbEntries" class="btn">
+            Save DB Entries
           </button>
-          <button v-on:click="getEntries" class="btn">
-            Get Entries
-          </button>
-          <button v-on:click="updateEntries" class="btn">
-            Update Entries
-          </button>
-          <button v-on:click="syncEntries" class="btn">
-            Sync Entries
-          </button>
+          <button v-on:click="syncEntries" class="btn">Sync Entries</button>
         </div>
 
         <div v-for="entry in entries" class="products">
           <div class="product">
-<!--             <div class="image">
+            <div class="image">
               <img :src="entry.product.images[locale][0]" />
-            </div> -->
-            <h2>
-              {{ entry.product.name[locale]}}
-            </h2>
+            </div>
+            <h2>{{ entry.product.name[locale]}}</h2>
+            {{getStatus(entry.product)}}
           </div>
           <table>
             <thead>
@@ -67,18 +60,23 @@
                 </th>
               </tr>
             </thead>
-          <tbody>
-            <tr v-for="variant in entry.variants">
-              <td v-for="field in getFields(variant)">
-                <span v-if="!field.editable">{{field.value}}</span> 
-                <input type="number" v-if="field.editable" :value="field.field" v-on:input="field.setValue($event.target.value)"/>
-              </td>
-            </tr>
-          </tbody>
+            <tbody>
+              <tr v-for="variant in entry.variants">
+                <td v-for="field in getFields(variant)">
+                  <span v-if="!field.editable">{{field.value}}</span>
+                  <input
+                    type="number"
+                    v-if="field.editable"
+                    :value="field.field"
+                    v-on:input="field.setValue($event.target.value)"
+                  />
+                </td>
+              </tr>
+            </tbody>
           </table>
         </div>
 
-<!--         <div v-for="entry in entries" class="products">
+        <!--         <div v-for="entry in entries" class="products">
           <div class="product">
             <div class="image">
               <img :src="entry.product.images.en[0]" />

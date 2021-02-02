@@ -1,14 +1,14 @@
-const fetch = require("node-fetch");
+import fetch from "node-fetch";
 
-const locale = "en-US"
+const locale = process.env.CONTENTFUL_LOCALE;
 
 async function getProducts() {
   const res = await fetch("https://api.printful.com/sync/products", {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Basic ${process.env.PRINTFUL_API_KEY}`
-    }
+      Authorization: `Basic ${process.env.PRINTFUL_API_KEY}`,
+    },
   });
   const { result } = await res.json();
   return result;
@@ -21,8 +21,8 @@ async function getProductWithVariants(productId) {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Basic ${process.env.PRINTFUL_API_KEY}`
-      }
+        Authorization: `Basic ${process.env.PRINTFUL_API_KEY}`,
+      },
     }
   );
   const { result } = await res.json();
@@ -36,8 +36,8 @@ async function getVariantInfo(variantId) {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Basic ${process.env.PRINTFUL_API_KEY}`
-      }
+        Authorization: `Basic ${process.env.PRINTFUL_API_KEY}`,
+      },
     }
   );
   const { result } = await res.json();
@@ -49,26 +49,16 @@ async function getVariantShippingRates(variantId, recipient, currency) {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Basic ${process.env.PRINTFUL_API_KEY}`
+      Authorization: `Basic ${process.env.PRINTFUL_API_KEY}`,
     },
     body: JSON.stringify({
       recipient,
       items: [{ quantity: 1, variant_id: variantId }],
-      currency
-    })
+      currency,
+    }),
   });
   const { result } = await res.json();
   return result;
-}
-
-async function getAllProductWithVariants() {
-  const products = await getProducts();
-  const variants = [];
-  for (let i = 0; i < products.length; i++) {
-    const productWithVariant = await getProductWithVariants(products[i].id);
-    variants.push(productWithVariant);
-  }
-  return variants;
 }
 
 async function getAllProductInfo() {
@@ -88,7 +78,7 @@ async function getAllProductInfo() {
         );
         productInfo.sync_variants[j].shippingRates.push({
           country: recipients[k].country_code,
-          shippingRates
+          shippingRates,
         });
       }
     }
@@ -97,41 +87,41 @@ async function getAllProductInfo() {
   return productsInfo;
 }
 
-async function getProductEntries() {
-  const products = await getAllProductWithVariants();
+export async function getPrinfulEntries() {
+  const products = await getAllProductInfo();
   return products.map(productToEntry);
 }
 
-function productToEntry(product) {
+export function productToEntry(product) {
   const entry = {
     product: parseProduct(product.sync_product),
-    variants: product.sync_variants.map(parseVariant)
+    variants: product.sync_variants.map(parseVariant),
   };
   const images = entry.variants[0].images[locale];
   if (
     entry.variants.every(
-      variant =>
+      (variant) =>
         JSON.stringify(variant.images[locale][0]) === JSON.stringify(images[0])
     )
   ) {
     entry.product.images[locale] = images;
-    entry.variants.forEach(variant => (variant.images[locale] = []));
+    entry.variants.forEach((variant) => (variant.images[locale] = []));
   }
   return entry;
 }
 
-function parseProduct(product) {
+export function parseProduct(product) {
   return {
     name: { [locale]: product.name },
     sku: { [locale]: product.external_id },
-    images: { [locale]: [] }
+    images: { [locale]: [] },
   };
 }
 
-function parseVariant(variant) {
-  const shippingRates = variant.shippingRates.map(shippingRates => ({
+export function parseVariant(variant) {
+  const shippingRates = variant.shippingRates.map((shippingRates) => ({
     country: shippingRates.country,
-    rate: parseFloat(shippingRates.shippingRates[0].rate)
+    rate: parseFloat(shippingRates.shippingRates[0].rate),
   }));
   return {
     name: { [locale]: variant.name.split(" - ")[1] },
@@ -139,40 +129,31 @@ function parseVariant(variant) {
     productPrice: { [locale]: parseFloat(variant.info.price) },
     retailPrice: { [locale]: parseFloat(variant.retail_price) },
     shippingRates: { [locale]: shippingRates },
-    images: { [locale]: variant.files.map(file => file.preview_url) }
+    images: { [locale]: variant.files.map((file) => file.preview_url) },
   };
 }
-
-module.exports = {
-  getProducts,
-  getProductWithVariants,
-  getAllProductWithVariants,
-  getProductEntries,
-  productToEntry,
-  getAllProductInfo
-};
 
 const recipients = [
   {
     address1: "1 Avenue Marceau",
     city: "Courbevoie",
-    country_code: "FR"
+    country_code: "FR",
   },
   {
     address1: "10 Downing Street",
     city: "London",
-    country_code: "GB"
+    country_code: "GB",
   },
   {
     address1: "19749 Dearborn St",
     city: "Chatsworth",
     country_code: "US",
-    state_code: "CA"
+    state_code: "CA",
   },
   {
     adress1: "453 West 12th Avenue",
     city: "Vancouver",
     country_code: "CA",
-    state_code: "BC"
-  }
+    state_code: "BC",
+  },
 ];
