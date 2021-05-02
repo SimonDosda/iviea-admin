@@ -51,7 +51,7 @@ export async function updateEntries(entries) {
   });
 
   // update or create variants
-  const variantsBySku = {};
+  const variantsById = {};
   for (let entryIndex = 0; entryIndex < entries.length; entryIndex++) {
     const { product, variants } = entries[entryIndex];
     delete product.printful;
@@ -61,10 +61,10 @@ export async function updateEntries(entries) {
       delete variant.printful;
       delete variant.contentful;
       const existingVariant = currentVariants.items.find(
-        (item) => item.fields.sku[locale] === variant.sku[locale]
+        (item) => item.fields.id[locale] === variant.id[locale]
       );
       if (existingVariant) {
-        variantsBySku[variant.sku[locale]] = existingVariant;
+        variantsById[variant.id[locale]] = existingVariant;
         client.entry.update(
           { entryId: existingVariant.sys.id },
           { fields: variant, sys: existingVariant.sys }
@@ -74,14 +74,14 @@ export async function updateEntries(entries) {
           ...variant,
           images: { [locale]: [] },
         });
-        variantsBySku[variant.sku[locale]] = newVariant;
+        variantsById[variant.id[locale]] = newVariant;
       }
     }
   }
 
   // remove obsolete variants
   currentVariants.items.forEach((variant) => {
-    if (!variantsBySku[variant.fields.sku[locale]]) {
+    if (!variantsById[variant.fields.id[locale]]) {
       client.entry.delete({ entryId: variant.sys.id });
     }
   });
@@ -100,7 +100,7 @@ export async function updateEntries(entries) {
       variants: {
         [locale]: variants.map((variant) => ({
           sys: {
-            id: variantsBySku[variant.sku[locale]].sys.id,
+            id: variantsById[variant.id[locale]].sys.id,
             linkType: "Entry",
             type: "Link",
           },
@@ -109,7 +109,7 @@ export async function updateEntries(entries) {
     };
 
     const existingProduct = currentProducts.items.find(
-      (item) => item.fields.sku[locale] === product.sku[locale]
+      (item) => item.fields.id[locale] === product.id[locale]
     );
     if (existingProduct) {
       client.entry.update(
@@ -117,10 +117,20 @@ export async function updateEntries(entries) {
         { fields, sys: existingProduct.sys }
       );
     } else {
-      createEntry("product", {
-        ...fields,
-        images: { [locale]: [] },
-      });
+      // create assets
+      const name = product.name[locale];
+      const images = { [locale]: [] };
+      for (let i = 0; i < product.images[locale].length; i++) {
+        let file = product.images[locale][i];
+        console.dir(file, { depth: null });
+        let asset = await createAsset(name, file);
+        images[locale].push({
+          sys: { type: "Link", linkType: asset.sys.type, id: asset.sys.id },
+        });
+      }
+      // create product
+      const productToSend = { ...fields, images };
+      createEntry("product", productToSend);
     }
   }
 
@@ -134,6 +144,15 @@ export async function updateEntries(entries) {
       client.entry.delete({ entryId: product.sys.id });
     }
   });
+}
+
+export async function createAsset(title, file) {
+  const fields = {
+    title: { [locale]: title },
+    file: { [locale]: file },
+  };
+
+  return await client.asset.create({}, { fields });
 }
 
 export default {

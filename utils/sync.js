@@ -4,7 +4,7 @@ export function mergeEntries(contentfulEntries, printfulEntries) {
   const entries = contentfulEntries.reduce((res, entry) => {
     return {
       ...res,
-      [entry.product.sku[locale]]: {
+      [entry.product.id[locale]]: {
         product: {
           ...entry.product,
           contentful: true,
@@ -19,12 +19,12 @@ export function mergeEntries(contentfulEntries, printfulEntries) {
     };
   }, {});
   printfulEntries.forEach((entry) => {
-    if (entry.product.sku[locale] in entries) {
-      const syncedEntry = entries[entry.product.sku[locale]];
+    if (entry.product.id[locale] in entries) {
+      const syncedEntry = entries[entry.product.id[locale]];
       syncedEntry.product.printful = true;
       entry.variants.forEach((variant) => {
         const syncedVariant = syncedEntry.variants.find(
-          (v) => v.sku[locale] === variant.sku[locale]
+          (v) => v.id[locale] === variant.id[locale]
         );
         if (syncedVariant) {
           syncedVariant.printful = true;
@@ -37,7 +37,7 @@ export function mergeEntries(contentfulEntries, printfulEntries) {
         }
       });
     } else {
-      entries[entry.product.sku[locale]] = {
+      entries[entry.product.id[locale]] = {
         product: {
           ...entry.product,
           contentful: false,
@@ -55,7 +55,7 @@ export function mergeEntries(contentfulEntries, printfulEntries) {
   return Object.values(entries).map((entry) => ({
     ...entry,
     variants: entry.variants.sort(
-      (v1, v2) => v1.productPrice[locale] - v2.productPrice[locale]
+      (v1, v2) => v1.price[locale] - v2.price[locale]
     ),
   }));
 }

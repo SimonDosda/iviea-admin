@@ -69,18 +69,6 @@ async function getAllProductInfo() {
     for (let j = 0; j < productInfo.sync_variants.length; j++) {
       const { variant_id } = productInfo.sync_variants[j];
       productInfo.sync_variants[j].info = await getVariantInfo(variant_id);
-      productInfo.sync_variants[j].shippingRates = [];
-      for (let k = 0; k < recipients.length; k++) {
-        const shippingRates = await getVariantShippingRates(
-          variant_id,
-          recipients[k],
-          "EUR"
-        );
-        productInfo.sync_variants[j].shippingRates.push({
-          country: recipients[k].country_code,
-          shippingRates,
-        });
-      }
     }
     productsInfo.push(productInfo);
   }
@@ -112,24 +100,27 @@ export function productToEntry(product) {
 
 export function parseProduct(product) {
   return {
+    id: { [locale]: product.id },
     name: { [locale]: product.name },
-    sku: { [locale]: product.external_id },
     images: { [locale]: [] },
   };
 }
 
 export function parseVariant(variant) {
-  const shippingRates = variant.shippingRates.map((shippingRates) => ({
-    country: shippingRates.country,
-    rate: parseFloat(shippingRates.shippingRates[0].rate),
-  }));
   return {
-    name: { [locale]: variant.name.split(" - ")[1] },
-    sku: { [locale]: variant.external_id },
-    productPrice: { [locale]: parseFloat(variant.info.price) },
-    retailPrice: { [locale]: parseFloat(variant.retail_price) },
-    shippingRates: { [locale]: shippingRates },
-    images: { [locale]: variant.files.map((file) => file.preview_url) },
+    id: { [locale]: variant.id },
+    name: { [locale]: variant.name },
+    description: { [locale]: variant.info.name },
+    size: { [locale]: variant.info.size },
+    sku: { [locale]: variant.sku },
+    price: { [locale]: parseFloat(variant.retail_price) },
+    images: {
+      [locale]: variant.files.map((file) => ({
+        upload: file.preview_url,
+        contentType: file.mime_type,
+        fileName: file.filename,
+      })),
+    },
   };
 }
 
