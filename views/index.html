@@ -10,12 +10,6 @@
 
     <title>Syncful</title>
 
-    <link
-      id="favicon"
-      rel="icon"
-      href="https://glitch.com/edit/favicon-app.ico"
-      type="image/x-icon"
-    />
     <!-- import the webpage's stylesheet -->
     <link rel="stylesheet" href="/style.css" />
 
@@ -25,6 +19,7 @@
     <!-- import the webpage's client-side javascript file -->
     <script src="/client.js" defer></script>
   </head>
+
   <body>
     <div id="app">
       <main>
@@ -47,7 +42,7 @@
         <div v-for="entry in entries" class="products">
           <div class="product">
             <div class="image">
-              <img :src="entry.product.images[locale][0]" />
+              <img :src="entry.product.images[locale][0].upload" />
             </div>
             <h2>{{ entry.product.name[locale]}}</h2>
             {{getStatus(entry.product)}}
@@ -64,12 +59,6 @@
               <tr v-for="variant in entry.variants">
                 <td v-for="field in getFields(variant)">
                   <span v-if="!field.editable">{{field.value}}</span>
-                  <input
-                    type="number"
-                    v-if="field.editable"
-                    :value="field.field"
-                    v-on:input="field.setValue($event.target.value)"
-                  />
                 </td>
               </tr>
             </tbody>

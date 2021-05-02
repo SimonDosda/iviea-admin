@@ -22,7 +22,9 @@ main {
   color: darkblue;
   width: 100%;
 }
-.btn:hover, .btn:focus , .btn:active {
+.btn:hover,
+.btn:focus,
+.btn:active {
   font-weight: bold;
 }
 
@@ -48,7 +50,8 @@ img {
   max-width: 100%;
 }
 
-th, td {
+th,
+td {
   padding: 10px;
 }
 
